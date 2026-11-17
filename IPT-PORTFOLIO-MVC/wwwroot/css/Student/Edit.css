@@ -1,4 +1,4 @@
-/* Editor layout. Inputs, buttons and surfaces come from components.css. */
+/* Styles ito ng edit form sections, uploads, education cards, at Save actions. */
 .edit-page .workspace-main {
     animation: none;
     padding-top: 32px;
@@ -53,6 +53,7 @@
     min-width: 0;
 }
 
+/* Section links para mabilis lumipat sa ibang bahagi ng edit form. */
 .edit-profile .edit-section-nav {
     display: flex;
     flex-direction: column;
@@ -245,7 +246,7 @@
     display: none;
 }
 
-/* Education records keep each school and both years together. */
+/* Magkakasama sa card ang school at parehong start at end year. */
 .edit-profile .education-help {
     margin: 0 0 24px;
     padding: 14px 16px;
@@ -265,6 +266,7 @@
     background: #f4f8ff;
 }
 
+/* Layout ng fixed education cards at autofill controls. */
 .edit-profile .education-editor {
     min-width: 0;
     margin: 0 0 24px;
@@ -377,7 +379,7 @@
     margin-top: 18px;
 }
 
-/* Persistent actions stay separate from the form fields. */
+/* May sariling area ang Save at Cancel para madaling makita habang nag-e-edit. */
 .edit-profile .form-actions {
     position: sticky;
     bottom: max(14px, env(safe-area-inset-bottom));
@@ -451,6 +453,7 @@
     outline-offset: 3px;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 1100px) {
     .edit-profile .editor-layout {
         grid-template-columns: 180px minmax(0, 1fr);
@@ -474,6 +477,7 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 900px) {
     .edit-profile .editor-layout {
         grid-template-columns: minmax(0, 1fr);
@@ -501,6 +505,7 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 600px) {
     .edit-page .workspace-main {
         padding-top: 24px;
@@ -588,12 +593,14 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-height: 520px) {
     .edit-profile .form-actions {
         position: static;
     }
 }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     html:has(.edit-page) {
         scroll-behavior: smooth;
@@ -662,6 +669,7 @@
     }
 }
 
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     html:has(.edit-page) {
         scroll-behavior: auto;
@@ -686,7 +694,7 @@
 }
 
 
-/* Project editor uses the same fields and actions as the rest of the profile. */
+/* Pareho ang field at action styles ng projects at ibang profile sections. */
 .edit-profile .project-editor-help {
     margin-bottom: 24px;
     padding: 14px 16px;
@@ -737,10 +745,12 @@
 .edit-profile .project-feedback { margin: 0 0 20px; color: #3e638e; font-size: 13px; line-height: 1.7; }
 .edit-profile .project-feedback:empty { display: none; }
 .edit-profile .project-editor-empty { margin-bottom: 20px; }
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 600px) {
     .edit-profile .project-editor-card { padding: 18px 14px; }
     .edit-profile .add-project-button { width: 100%; }
 }
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .edit-profile .editor-back-link:hover span[aria-hidden] { transform: translateX(-3px); }
     .edit-profile .edit-section-nav a:hover { transform: translateX(2px); }
@@ -754,7 +764,7 @@
 }
 
 
-/* Optional project images share the existing private image-upload flow. */
+/* Styles ito ng optional project screenshot preview at upload controls. */
 .edit-profile .project-image-editor { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--student-line); }
 .edit-profile .project-image-preview { display: grid; place-items: center; width: 100%; aspect-ratio: 16 / 9; max-height: 280px; overflow: hidden; margin-bottom: 16px; border: 1.5px dashed #cbd9eb; border-radius: 10px; background: #f1f5fb; color: var(--student-muted); font-size: 13px; transition: border-color .2s ease, background-color .2s ease; }
 .edit-profile .project-image-editor:hover .project-image-preview { border-color: #9bb9e3; background: #edf3fc; }

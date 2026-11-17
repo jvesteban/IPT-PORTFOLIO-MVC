@@ -1,3 +1,4 @@
+// Ito ang username at password mula sa login form, kasama ang input rules.
 using System.ComponentModel.DataAnnotations;
 
 namespace IPT_PORTFOLIO_MVC.ViewModels.Account;

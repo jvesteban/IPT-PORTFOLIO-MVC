@@ -1,4 +1,4 @@
-/* Shared navigation for dashboard, portfolio and profile editing. */
+/* Shared navbar styles ito ng student dashboard, edit form, at portfolio. */
 .student-shell > .workspace-header {
     position: sticky;
     top: 0;
@@ -92,6 +92,7 @@
     margin: 0;
 }
 
+/* Mobile menu button at ang open o closed na itsura nito. */
 .student-navbar-button, .student-navbar-toggle {
     display: inline-flex;
     align-items: center;
@@ -144,6 +145,7 @@
     outline-offset: 3px;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 1050px) {
     .student-navbar {
         flex-wrap: wrap;
@@ -202,18 +204,21 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 720px) {
     .student-navbar {
         width: calc(100% - 40px);
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 480px) {
     .student-navbar {
         width: calc(100% - 32px);
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 420px) {
     .student-navbar-actions {
         display: grid;
@@ -227,6 +232,7 @@
     }
 }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     .student-navbar.is-menu-open .student-navbar-panel {
         animation: student-menu-enter .2s cubic-bezier(.22, 1, .36, 1) backwards;
@@ -243,6 +249,7 @@
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .student-navbar-button:not(:disabled):hover,
     .student-navbar-toggle:hover {
@@ -254,6 +261,7 @@
     }
 }
 
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     .student-navbar, .student-navbar * {
         animation: none !important;

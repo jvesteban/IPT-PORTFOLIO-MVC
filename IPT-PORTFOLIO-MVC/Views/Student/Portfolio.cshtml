@@ -1,3 +1,4 @@
+@* Ito ang portfolio preview na nagpapakita ng saved data ng napiling student. *@
 @model IPT_PORTFOLIO_MVC.ViewModels.Student.StudentPortfolioViewModel
 @{
     Layout = "_StudentLayout";
@@ -9,6 +10,7 @@
     ViewData["NavigationBrandHref"] = "#student-content";
     ViewData["NavigationLabel"] = "Portfolio sections";
 }
+@* Links ito papunta sa saved portfolio sections sa parehong page. *@
 @section WorkspaceNavigation {
     <a href="#about">About</a>
     <a href="#skills">Skills</a>
@@ -18,6 +20,7 @@
     <a href="#projects">Projects</a>
     <a href="#contact">Contact</a>
 }
+@* Dito nakalagay ang page actions, kasama ang Edit kapag owner ang viewer. *@
 @section WorkspaceActions {
     <a class="student-navbar-action-link" asp-controller="Student" asp-action="Dashboard">Dashboard</a>
     @if (Model.IsOwnPortfolio)
@@ -31,6 +34,7 @@
         <p class="profile-save-notice" role="status">@savedMessage</p>
     }
 
+    @* Pangunahing pagpapakilala ito gamit ang pangalan, photo, at saved introduction. *@
     <header class="portfolio-hero">
         <div class="hero-inner">
             <div class="hero-copy">
@@ -66,6 +70,7 @@
         </div>
     </header>
 
+    @* Personal at business introduction ang ipinapakita sa about section. *@
     <section id="about" class="portfolio-section about-section" aria-labelledby="about-heading">
         <div class="section-heading">
             <h2 id="about-heading">About the student</h2>
@@ -98,6 +103,7 @@
         </div>
     </section>
 
+    @* Ipakita ang saved skills at ang empty state kung wala pa. *@
     <section id="skills" class="portfolio-section skills-section" aria-labelledby="skills-heading">
         <div class="section-heading">
             <h2 id="skills-heading">Skills and passions</h2>
@@ -122,6 +128,7 @@
         </div>
     </section>
 
+    @* Bawat saved service ay ipinapakita bilang sariling card. *@
     <section id="services" class="portfolio-section services-section" aria-labelledby="services-heading">
         <div class="section-heading">
             <h2 id="services-heading">Products &amp; services</h2>
@@ -146,6 +153,7 @@
         else { <p class="portfolio-empty-state">No products or services added yet.</p> }
     </section>
 
+    @* Saved owner information ang laman ng section na ito. *@
     <section id="owners" class="portfolio-section owners-section" aria-labelledby="owners-heading">
         <div class="section-heading">
             <h2 id="owners-heading">Owners</h2>
@@ -165,6 +173,7 @@
         else { <p class="portfolio-empty-state">No owner information added yet.</p> }
     </section>
 
+    @* Naka-group ayon sa education level ang background at hobbies rito. *@
     <section id="education" class="portfolio-section education-section" aria-labelledby="education-heading">
         <div class="section-heading">
             <h2 id="education-heading">Education history</h2>
@@ -191,6 +200,7 @@
         else { <p class="portfolio-empty-state">No education history added yet.</p> }
     </section>
 
+    @* Project gallery ito na may optional screenshots at original project links. *@
     <section id="projects" class="portfolio-section projects-section" aria-labelledby="projects-heading">
         <div class="section-heading projects-heading">
             <div>
@@ -240,6 +250,7 @@
         }
     </section>
 
+    @* Saved email, phone, at address lang ang basehan ng contact details. *@
     <section id="contact" class="contact-section" aria-labelledby="contact-heading">
         <div class="contact-inner">
             <div class="contact-heading">
@@ -257,9 +268,11 @@
         </div>
     </section>
 </div>
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles {
     <link rel="stylesheet" href="~/css/Student/Portfolio.css" asp-append-version="true" />
 }
+@* Page-specific scripts ito para sa interactions at validation. *@
 @section Scripts {
     <script src="~/js/student/portfolio.js" asp-append-version="true"></script>
 }

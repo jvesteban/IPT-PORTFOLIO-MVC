@@ -1,3 +1,4 @@
+// Habang running ang app, dito ipinapadala ang pending deactivation emails.
 using System.Net;
 using System.Net.Mail;
 using IPT_PORTFOLIO_MVC.Data;
@@ -8,6 +9,7 @@ namespace IPT_PORTFOLIO_MVC.Services;
 public sealed class DeactivationEmailWorker(IServiceScopeFactory scopes, IConfiguration config,
     ILogger<DeactivationEmailWorker> logger) : BackgroundService
 {
+    // Habang running ang app, mag-check ng pending emails at maghintay kapag walang maipadala.
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
@@ -27,12 +29,13 @@ public sealed class DeactivationEmailWorker(IServiceScopeFactory scopes, IConfig
         }
     }
 
+    // Mag-process ng isang due email gamit ang sariling database scope at transaction.
     private async Task<bool> DeliverNext(string host, MailAddress from, CancellationToken token)
     {
         using var scope = scopes.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await using var tx = await db.Database.BeginTransactionAsync(token);
-        // Reserve one message until SMTP accepts it or the retry time is recorded.
+        // I-lock muna ang napiling email para hindi ito sabay maproseso ng ibang worker.
         var pending = await db.PendingDeactivationEmails.FromSqlRaw("""
             SELECT TOP (1) * FROM dbo.PendingDeactivationEmails WITH (UPDLOCK, ROWLOCK)
             WHERE NextAttemptAt <= SYSUTCDATETIME() ORDER BY NextAttemptAt, UserId
@@ -45,6 +48,7 @@ public sealed class DeactivationEmailWorker(IServiceScopeFactory scopes, IConfig
             Body = $"Your IPT Portfolio administrator has deactivated your student account.\n\nReason: {pending.Reason}\n\nYou can contact your portfolio administrator to ask about reactivation.",
             BodyEncoding = System.Text.Encoding.UTF8
         };
+        // Kunin sa configuration ang SMTP host, port, SSL, at login credentials.
         using var smtp = new SmtpClient(host, config.GetValue("Smtp:Port", 587))
         {
             EnableSsl = config.GetValue("Smtp:EnableSsl", true)
@@ -52,6 +56,7 @@ public sealed class DeactivationEmailWorker(IServiceScopeFactory scopes, IConfig
         if (!string.IsNullOrWhiteSpace(config["Smtp:Username"]))
             smtp.Credentials = new NetworkCredential(config["Smtp:Username"], config["Smtp:Password"]);
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(token);
+        // Limitahan ang paghihintay sa email server para may timeout ang bawat attempt.
         timeout.CancelAfter(TimeSpan.FromSeconds(25));
         try
         {
@@ -61,6 +66,7 @@ public sealed class DeactivationEmailWorker(IServiceScopeFactory scopes, IConfig
         catch (Exception ex) when (!token.IsCancellationRequested &&
             ex is SmtpException or OperationCanceledException or System.Net.Sockets.SocketException)
         {
+            // Kapag pumalya ang send, subukan ulit pagkatapos ng limang minuto.
             pending.NextAttemptAt = DateTime.UtcNow.AddMinutes(5);
             logger.LogWarning("SMTP delivery failed for account {UserId}. A retry is scheduled.", pending.UserId);
         }

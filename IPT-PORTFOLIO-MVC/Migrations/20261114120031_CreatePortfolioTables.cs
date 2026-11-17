@@ -1,3 +1,4 @@
+// Ito ang unang migration para buuin ang accounts at portfolio tables.
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -5,12 +6,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IPT_PORTFOLIO_MVC.Migrations
 {
-    /// <inheritdoc />
     public partial class CreatePortfolioTables : Migration
     {
-        /// <inheritdoc />
+        // Ito ang pagbabago sa database kapag in-apply ang migration.
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Buuin ang table na Users.
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -32,6 +33,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                     table.CheckConstraint("CK_Users_UserRole", "[UserRole] IN (N'Admin', N'Student')");
                 });
 
+            // Buuin ang table na StudentProfiles.
             migrationBuilder.CreateTable(
                 name: "StudentProfiles",
                 columns: table => new
@@ -63,6 +65,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Buuin ang table na ContactInformation.
             migrationBuilder.CreateTable(
                 name: "ContactInformation",
                 columns: table => new
@@ -87,6 +90,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Buuin ang table na EducationHistory.
             migrationBuilder.CreateTable(
                 name: "EducationHistory",
                 columns: table => new
@@ -115,6 +119,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Buuin ang table na Hobbies.
             migrationBuilder.CreateTable(
                 name: "Hobbies",
                 columns: table => new
@@ -136,6 +141,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Buuin ang table na Projects.
             migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
@@ -160,6 +166,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Buuin ang table na Skills.
             migrationBuilder.CreateTable(
                 name: "Skills",
                 columns: table => new
@@ -181,6 +188,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Buuin ang table na SocialLinks.
             migrationBuilder.CreateTable(
                 name: "SocialLinks",
                 columns: table => new
@@ -204,75 +212,90 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // I-set ang database index na IX_ContactInformation_StudentProfileId.
             migrationBuilder.CreateIndex(
                 name: "IX_ContactInformation_StudentProfileId",
                 table: "ContactInformation",
                 column: "StudentProfileId",
                 unique: true);
 
+            // I-set ang database index na IX_EducationHistory_StudentProfileId_EducationLevel_Grade.
             migrationBuilder.CreateIndex(
                 name: "IX_EducationHistory_StudentProfileId_EducationLevel_Grade",
                 table: "EducationHistory",
                 columns: new[] { "StudentProfileId", "EducationLevel", "Grade" },
                 unique: true);
 
+            // I-set ang database index na IX_Hobbies_StudentProfileId.
             migrationBuilder.CreateIndex(
                 name: "IX_Hobbies_StudentProfileId",
                 table: "Hobbies",
                 column: "StudentProfileId");
 
+            // I-set ang database index na IX_Projects_StudentProfileId.
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_StudentProfileId",
                 table: "Projects",
                 column: "StudentProfileId");
 
+            // I-set ang database index na IX_Skills_StudentProfileId.
             migrationBuilder.CreateIndex(
                 name: "IX_Skills_StudentProfileId",
                 table: "Skills",
                 column: "StudentProfileId");
 
+            // I-set ang database index na IX_SocialLinks_StudentProfileId.
             migrationBuilder.CreateIndex(
                 name: "IX_SocialLinks_StudentProfileId",
                 table: "SocialLinks",
                 column: "StudentProfileId");
 
+            // I-set ang database index na IX_StudentProfiles_UserId.
             migrationBuilder.CreateIndex(
                 name: "IX_StudentProfiles_UserId",
                 table: "StudentProfiles",
                 column: "UserId",
                 unique: true);
 
+            // I-set ang database index na IX_Users_Username.
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",
                 table: "Users",
                 column: "Username",
                 unique: true);
         }
-
-        /// <inheritdoc />
+        // Ito ang pagbabalik ng schema kapag ni-rollback ang migration.
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Alisin ang table na ContactInformation.
             migrationBuilder.DropTable(
                 name: "ContactInformation");
 
+            // Alisin ang table na EducationHistory.
             migrationBuilder.DropTable(
                 name: "EducationHistory");
 
+            // Alisin ang table na Hobbies.
             migrationBuilder.DropTable(
                 name: "Hobbies");
 
+            // Alisin ang table na Projects.
             migrationBuilder.DropTable(
                 name: "Projects");
 
+            // Alisin ang table na Skills.
             migrationBuilder.DropTable(
                 name: "Skills");
 
+            // Alisin ang table na SocialLinks.
             migrationBuilder.DropTable(
                 name: "SocialLinks");
 
+            // Alisin ang table na StudentProfiles.
             migrationBuilder.DropTable(
                 name: "StudentProfiles");
 
+            // Alisin ang table na Users.
             migrationBuilder.DropTable(
                 name: "Users");
         }

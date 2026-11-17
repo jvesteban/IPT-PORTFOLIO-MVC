@@ -1,3 +1,4 @@
+@* Ito ang registration form para sa bagong student account. *@
 @model IPT_PORTFOLIO_MVC.ViewModels.Account.RegisterViewModel
 @{
     ViewData["Title"] = "Create account";
@@ -7,6 +8,7 @@
 <div class="auth-form-content register-page">
     <h1>Create your account</h1>
     <p class="form-intro">Start building your student portfolio.</p>
+    @* Ipakita sa bawat field ang validation errors bago subukang mag-register ulit. *@
     <form asp-controller="Account" asp-action="Register" method="post" class="account-form">
         <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
         <div class="field-row">
@@ -48,10 +50,12 @@
     <p class="switch-prompt">Already have an account? <a asp-controller="Account" asp-action="Login">Sign in</a></p>
 </div>
 
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles {
     <link rel="stylesheet" href="~/css/account/register.css" asp-append-version="true" />
 }
 
+@* Page-specific scripts ito para sa interactions at validation. *@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

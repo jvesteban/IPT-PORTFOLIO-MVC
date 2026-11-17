@@ -1,3 +1,4 @@
+@* Ito ang login form na nagpapasa ng username at password sa Account controller. *@
 @model IPT_PORTFOLIO_MVC.ViewModels.Account.LoginViewModel
 @{
     ViewData["Title"] = "Sign in";
@@ -11,6 +12,7 @@
     {
         <p class="success-notice" role="status">@message</p>
     }
+    @* POST request ang gamit para i-check ng server ang login details. *@
     <form asp-controller="Account" asp-action="Login" method="post" class="account-form">
         <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
         <div class="field">
@@ -31,10 +33,12 @@
     <p class="switch-prompt">Don't have an account? <a asp-controller="Account" asp-action="Register">Create one</a></p>
 </div>
 
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles {
     <link rel="stylesheet" href="~/css/account/login.css" asp-append-version="true" />
 }
 
+@* Page-specific scripts ito para sa interactions at validation. *@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

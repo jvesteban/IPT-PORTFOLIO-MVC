@@ -1,4 +1,5 @@
-/* Shared foundations for student and admin workspaces. */
+/* Shared base styles at logout dialog ito ng student at admin pages. */
+/* Shared colors, spacing, at ibang values na ginagamit sa file na ito. */
 :root {
     --student-blue: #225bd8;
     --admin-blue: #225bd8;
@@ -43,13 +44,16 @@ input, select, textarea { max-width: 100%; }
 .admin-main .eyebrow { font-size: 10px; letter-spacing: 1.4px; }
 .admin-main .preview-caption { font-size: 12px; }
 @keyframes workspace-enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 1000px) {
     .admin-shell { grid-template-columns: 196px minmax(0, 1fr); }
     .admin-main { padding: 26px; }
 }
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 768px) {
     .workspace-main { padding-top: 24px; }
 }
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 720px) {
     .admin-shell { display: block; }
     .admin-sidebar { padding: 18px 20px 12px; position: static; height: auto; }
@@ -63,10 +67,12 @@ input, select, textarea { max-width: 100%; }
     .admin-actions { flex-shrink: 0; }
     .admin-main { padding: 24px 20px 36px; }
 }
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 480px) {
     .workspace-main, .footer-inner { width: calc(100% - 32px); }
     .admin-main { padding: 24px 16px 32px; }
 }
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
@@ -84,6 +90,7 @@ input, select, textarea { max-width: 100%; }
 #signout-dialog::backdrop { background: rgb(16 36 62 / 48%); }
 #signout-dialog h2 { margin: 0; font-size: 1.35rem; }
 #signout-dialog p { margin: .7rem 0 1.5rem; line-height: 1.6; }
+/* Buttons ng logout confirmation dialog. */
 .signout-actions { display: flex; gap: .7rem; flex-wrap: wrap; }
 .signout-actions button {
     cursor: pointer;
@@ -100,6 +107,7 @@ input, select, textarea { max-width: 100%; }
 .signout-actions [data-confirm-signout] { background: #1d5394; border-color: transparent; color: white; }
 .signout-actions button:focus-visible { outline: 3px solid #71a7ea; outline-offset: 2px; }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     #signout-dialog[open] {
         animation: dialog-enter .22s cubic-bezier(.22, 1, .36, 1);
@@ -110,6 +118,7 @@ input, select, textarea { max-width: 100%; }
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .signout-actions button:hover {
         border-color: #93b3dc;

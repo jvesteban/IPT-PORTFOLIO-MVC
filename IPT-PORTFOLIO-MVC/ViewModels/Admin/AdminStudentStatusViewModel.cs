@@ -1,3 +1,4 @@
+// Ito ang request ng admin para baguhin ang status ng student at ilagay ang reason.
 using System.ComponentModel.DataAnnotations;
 
 namespace IPT_PORTFOLIO_MVC.ViewModels.Admin;

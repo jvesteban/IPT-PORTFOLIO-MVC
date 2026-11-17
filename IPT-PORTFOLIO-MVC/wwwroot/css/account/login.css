@@ -1,4 +1,4 @@
-/* Login card, branding and footer. */
+/* Styles ito ng login card, fields, feedback, at buttons. */
 .login-screen {
     background: #fff;
 }
@@ -88,6 +88,7 @@
     line-height: 1.5;
 }
 
+/* Input size, borders, at text spacing para consistent ang form fields. */
 .login-page .field input {
     width: 100%;
     min-width: 0;
@@ -150,6 +151,7 @@
     outline-offset: 1px;
 }
 
+/* Submit button styles at interaction states ng form. */
 .login-page .submit-button {
     width: 100%;
     height: 50px;
@@ -196,6 +198,7 @@
     text-decoration: underline;
 }
 
+/* Field errors at validation feedback para madaling makita ang kailangang ayusin. */
 .login-page .field-error {
     font-size: 12px;
     line-height: 1.5;
@@ -237,6 +240,7 @@
     line-height: 1.6;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 520px) {
     .login-screen .auth-header {
         padding-top: 32px;
@@ -264,6 +268,7 @@
     }
 }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     .login-page {
         animation: login-form-enter .32s cubic-bezier(.22, 1, .36, 1);
@@ -275,6 +280,7 @@
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .login-page .submit-button:hover {
         transform: translateY(-1px);
@@ -287,6 +293,7 @@
     }
 }
 
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     .login-page,
     .login-page *,

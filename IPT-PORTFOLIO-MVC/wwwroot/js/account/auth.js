@@ -1,5 +1,7 @@
+// Dito gumagana ang Show at Hide button ng password sa login at register.
 "use strict";
 
+// Hanapin ang password button at baguhin ang input type at screen reader label sa click.
 document.querySelectorAll(".password-toggle").forEach((button) => {
     button.addEventListener("click", () => {
         const input = document.getElementById(button.getAttribute("aria-controls"));

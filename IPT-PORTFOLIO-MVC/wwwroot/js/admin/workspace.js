@@ -1,8 +1,10 @@
+// Dito gumagana ang mobile admin menu, table scroll hint, at submit feedback.
 (() => {
     const sidebar = document.querySelector(".admin-sidebar");
     const toggle = sidebar?.querySelector(".admin-menu-toggle");
     const mobile = window.matchMedia("(max-width: 820px)");
 
+    // Isara ang mobile sidebar at i-update ang menu button state.
     function closeMenu() {
         sidebar.classList.remove("is-menu-open");
         toggle.setAttribute("aria-expanded", "false");
@@ -28,9 +30,11 @@
         mobile.addEventListener("change", closeMenu);
     }
 
+    // Ipakita ang scroll hint kung hindi kasya ang table sa screen.
     document.querySelectorAll("[data-table-scroll]").forEach(region => {
         const hint = document.getElementById(region.getAttribute("aria-describedby"));
         if (!hint) return;
+        // I-check kung kailangan ng horizontal scrolling at keyboard focus sa table.
         function updateOverflow() {
             const overflows = region.scrollWidth > region.clientWidth + 1;
             hint.hidden = !overflows;
@@ -41,6 +45,7 @@
         updateOverflow();
     });
 
+    // Magpakita ng loading text at pigilan ang duplicate form submission.
     const forms = [...document.querySelectorAll("form[data-admin-submit]")];
     const feedback = document.getElementById("admin-submit-feedback");
     forms.forEach(form => {
@@ -58,7 +63,7 @@
             button.textContent = button.dataset.loadingText || "Saving…";
             if (feedback) feedback.textContent = button.textContent;
         });
-        // Restore controls when a completed navigation is restored from browser history.
+        // Ibalik ang buttons kapag bumalik sa page gamit ang browser history.
         window.addEventListener("pageshow", () => {
             form.removeAttribute("aria-busy");
             button.disabled = false;

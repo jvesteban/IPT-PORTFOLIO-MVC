@@ -1,4 +1,5 @@
-/* Shared account layout. Each page loads its own stylesheet from this folder. */
+/* Shared layout, branding, at footer styles ito para sa login at register. */
+/* Shared colors, spacing, at ibang values na ginagamit sa file na ito. */
 :root { --ink: #18243b; --muted: #66738a; --blue: #245bd5; --line: #dce3ee; }
 * { box-sizing: border-box; }
 body { margin: 0; background: #f5f7fb; color: var(--ink); font-family: 'Segoe UI', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -13,11 +14,13 @@ a:focus-visible, button:focus-visible { outline: 3px solid #85abff; outline-offs
 .account-footer { padding: 0 24px 24px; text-align: center; color: #718098; font-size: 12px; }
 .skip-link { position: fixed; top: -100px; left: 16px; z-index: 10; padding: 12px 20px; background: white; }
 .skip-link:focus { top: 16px; }
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 520px) {
     .auth-header { padding-top: 28px; }
     .form-area { padding: 27px 18px; }
     .account-footer { font-size: 11px; }
 }
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     @view-transition { navigation: auto; }
     ::view-transition-old(root) { animation: auth-page-out .16s ease-out both; }
@@ -25,6 +28,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #85abff; outline-offs
     @keyframes auth-page-out { to { opacity: 0; } }
     @keyframes auth-page-in { from { opacity: 0; } to { opacity: 1; } }
 }
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
 }

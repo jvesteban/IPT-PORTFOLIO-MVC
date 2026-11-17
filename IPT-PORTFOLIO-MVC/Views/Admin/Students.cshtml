@@ -1,3 +1,4 @@
+@* Ito ang student directory ng admin na may search, filter, at activate o deactivate actions. *@
 @model IPT_PORTFOLIO_MVC.ViewModels.Admin.AdminStudentsViewModel
 @{
     Layout = "_AdminLayout";
@@ -32,6 +33,7 @@
             </div>
         </div>
 
+        @* GET request ang search at filter para kasama sa URL ang piniling values. *@
         <form asp-action="Students" method="get" class="student-filters" data-admin-submit>
             <div class="admin-field search-field">
                 <label asp-for="Search">Search students</label>
@@ -108,6 +110,7 @@
                                         {
                                             <details class="deactivation-control">
                                                 <summary class="admin-button is-danger">Deactivate</summary>
+                                                @* Kailangan ng reason para ma-deactivate ang student at ma-queue ang email notice. *@
                                                 <form asp-action="SetStatus" method="post" class="deactivation-form" data-admin-submit>
                                                     <input type="hidden" name="StudentId" value="@student.StudentId" />
                                                     <input type="hidden" name="IsActive" value="false" />
@@ -138,4 +141,5 @@
 
     <p class="preview-caption">Account deactivation immediately blocks sign-in access. Reactivation restores access instantly without losing existing student portfolio data.</p>
 </div>
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles { <link rel="stylesheet" href="~/css/admin/students.css" asp-append-version="true" /> }

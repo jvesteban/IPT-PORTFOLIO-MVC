@@ -1,9 +1,11 @@
+// Dito nakalista ang fixed education levels at grades na gamit sa form at preview.
 namespace IPT_PORTFOLIO_MVC.Services.Preview;
 
 public sealed record PreviewEducation(string Level, IReadOnlyList<PreviewEducationEntry> Entries)
 {
     public static readonly string[] Levels = ["Elementary", "Junior High", "Senior High", "College"];
 
+    // Ibalik ang eksaktong grades o college years na dapat may card sa bawat level.
     public static IReadOnlyList<string> Grades(string level) => level switch
     {
         "Elementary" => ["Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6"],

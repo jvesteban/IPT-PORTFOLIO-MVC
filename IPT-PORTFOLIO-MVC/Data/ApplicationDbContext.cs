@@ -1,3 +1,4 @@
+// Ito ang connection ng EF Core sa tables at rules ng database.
 using IPT_PORTFOLIO_MVC.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,7 @@ namespace IPT_PORTFOLIO_MVC.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : DbContext(options)
 {
+    // Bawat DbSet ay ginagamit para mag-query at mag-save sa katumbas nitong table.
     public DbSet<User> Users => Set<User>();
     public DbSet<PendingDeactivationEmail> PendingDeactivationEmails => Set<PendingDeactivationEmail>();
     public DbSet<StudentProfile> StudentProfiles => Set<StudentProfile>();
@@ -16,12 +18,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<SocialLink> SocialLinks => Set<SocialLink>();
     public DbSet<ContactInformation> ContactInformation => Set<ContactInformation>();
 
+    // Dito nakalagay ang table names, field limits, unique rules, at links ng records.
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        // I-link ang pending email sa account para isang pending notice lang kada user.
         modelBuilder.Entity<PendingDeactivationEmail>()
             .HasOne<User>().WithOne().HasForeignKey<PendingDeactivationEmail>(email => email.UserId);
 
+        // Unique ang username, at Admin o Student lang ang valid na role.
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("Users", table =>
@@ -39,6 +44,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(user => user.CreatedAt).HasDefaultValueSql("SYSUTCDATETIME()");
         });
 
+        // Isang profile lang kada user; kasama ang related profile sa account deletion.
         modelBuilder.Entity<StudentProfile>(entity =>
         {
             entity.Property(profile => profile.BusinessName).HasMaxLength(100);
@@ -58,6 +64,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        // Isang record lang kada student, education level, at grade.
         modelBuilder.Entity<EducationHistory>(entity =>
         {
             entity.ToTable("EducationHistory", table =>
@@ -83,6 +90,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        // I-link ang bawat skill sa profile at itabi ang display order.
         modelBuilder.Entity<Skill>(entity =>
         {
             entity.ToTable("Skills");
@@ -95,6 +103,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        // I-link ang bawat hobby sa profile at itabi ang display order.
         modelBuilder.Entity<Hobby>(entity =>
         {
             entity.ToTable("Hobbies");
@@ -107,6 +116,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        // I-set ang project field limits at i-link ang project sa owner profile.
         modelBuilder.Entity<Project>(entity =>
         {
             entity.Property(project => project.ImageId).HasMaxLength(100);
@@ -121,6 +131,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        // I-set ang social link fields at kung visible ito sa saved record.
         modelBuilder.Entity<SocialLink>(entity =>
         {
             entity.ToTable("SocialLinks");
@@ -135,6 +146,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        // Isang contact record lang kada student profile.
         modelBuilder.Entity<ContactInformation>(entity =>
         {
             entity.ToTable("ContactInformation");

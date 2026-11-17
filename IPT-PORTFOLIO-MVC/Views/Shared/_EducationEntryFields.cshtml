@@ -1,3 +1,4 @@
+@* Fields ito ng isang fixed grade card sa edit form, kasama ang school at parehong years. *@
 @using IPT_PORTFOLIO_MVC.ViewModels.Student
 @model StudentEducationEntryEditViewModel
 
@@ -11,6 +12,7 @@
         <input asp-for="SchoolName" data-field="SchoolName" autocomplete="off" aria-describedby="@(Html.IdFor(m => m.SchoolName))-validation" />
         <span asp-validation-for="SchoolName" data-error-for="SchoolName" id="@(Html.IdFor(m => m.SchoolName))-validation"></span>
     </div>
+    @* College course o SHS strand lang ang ipinapakita ayon sa education level. *@
     @if (ViewData["Level"] as string == "College")
     {
         <div class="field student-field">
@@ -27,6 +29,7 @@
             <span asp-validation-for="StrandTrack" data-error-for="StrandTrack" id="@(Html.IdFor(m => m.StrandTrack))-validation"></span>
         </div>
     }
+    @* Fixed ang grade, pero parehong start year at end year ang ini-input ng student. *@
     <div class="education-year-fields">
         <div class="field student-field">
             <label asp-for="Grade"></label>

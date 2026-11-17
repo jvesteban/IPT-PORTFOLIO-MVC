@@ -1,4 +1,4 @@
-/* Portfolio presentation inspired by Verity's typography, spacing and card rhythm. */
+/* Styles ito ng portfolio hero, sections, project gallery, at scroll animations. */
 .portfolio-page {
     --portfolio-ink: var(--student-ink);
     --portfolio-muted: var(--student-muted);
@@ -48,6 +48,7 @@
     outline-color: #4d83dd;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (min-width: 1051px) {
     .portfolio-page .student-navbar-brand {
         max-width: 190px;
@@ -86,7 +87,7 @@
     font-size: 14px;
 }
 
-/* A centered introduction with the student's own image and content. */
+/* Naka-center ang personal introduction, profile photo, at pangunahing actions. */
 .student-portfolio .portfolio-hero {
     padding: 80px 32px 52px;
     background: radial-gradient(ellipse at 50% 110%, #164a8290, transparent 65%), var(--portfolio-night);
@@ -259,7 +260,7 @@
     line-height: 1.4;
 }
 
-/* Shared section rhythm and content cards. */
+/* Pareho ang spacing ng sections at ang design ng content cards. */
 .student-portfolio .portfolio-section {
     width: min(1120px, calc(100% - 64px));
     margin: 0 auto;
@@ -354,7 +355,7 @@
     line-height: 1.8;
 }
 
-/* Personal information and the existing business story. */
+/* Layout ito ng personal details at business introduction. */
 .student-portfolio .about-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -385,6 +386,7 @@
     border-bottom: 0;
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (hover: hover) and (pointer: fine) {
     .student-portfolio .personal-information > div:hover {
         background: #f5f9ff;
@@ -436,7 +438,7 @@
     margin: 0;
 }
 
-/* Skills, services and owner information use the same visual language. */
+/* Pareho ang card styles ng skills, services, at owners details. */
 .student-portfolio .skills-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -507,7 +509,7 @@
     transition: background-color .2s ease, border-color .2s ease, transform .22s cubic-bezier(.22, 1, .36, 1);
 }
 
-/* Education is grouped by school stage for keyboard and touch navigation. */
+/* May sariling collapsible panel ang bawat education level. */
 .academic-history { display: grid; gap: .75rem; }
 .academic-stage {
     border: 1px solid var(--portfolio-line);
@@ -577,7 +579,7 @@
 .academic-stage dt, .academic-stage small { font-size: .86rem; }
 .academic-stage dd > * { display: block; }
 .academic-stage small { color: var(--portfolio-muted); }
-/* Image-led project gallery. Only the student's supplied content is shown. */
+/* Gallery styles ito ng screenshots at project details na nilagay ng student. */
 .student-portfolio .projects-heading {
     display: flex;
     align-items: flex-end;
@@ -711,7 +713,7 @@
     border-bottom: 0;
 }
 
-/* Contact is a clear final destination, using only existing contact details. */
+/* Contact section styles ito para sa saved email, phone, at address. */
 .student-portfolio .contact-section {
     padding: 72px 32px;
     background: radial-gradient(ellipse 75% 55% at 50% 0%, #16335888, transparent 70%), var(--portfolio-night);
@@ -833,7 +835,8 @@
     border: 0;
 }
 
-/* Responsive grids keep content readable rather than shrinking it. */
+/* I-adjust ang columns at spacing para madaling basahin sa mas maliit na screen. */
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 1050px) {
     .portfolio-page .student-navbar-actions {
         padding-left: 0;
@@ -852,6 +855,7 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 720px) {
     .portfolio-page .student-navbar, .portfolio-page .footer-inner {
         width: calc(100% - 40px);
@@ -935,6 +939,7 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 540px) {
     .student-portfolio .offering-grid, .student-portfolio .owners-list, .student-portfolio .education-stages {
         grid-template-columns: minmax(0, 1fr);
@@ -956,6 +961,7 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 380px) {
     .student-portfolio .hero-actions {
         align-items: stretch;
@@ -973,7 +979,8 @@
     }
 }
 
-/* Short entrances and one-time viewport reveals; no continuous animation. */
+/* Maikling entrance at minsanang scroll reveals ang gamit sa sections. */
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     .student-portfolio .project-cover {
         transition: transform .36s cubic-bezier(.22, 1, .36, 1);
@@ -1016,13 +1023,13 @@
         opacity: 1;
         translate: none;
     }
-    /* Keep reveal instant on keyboard focus, without breaking card hover transitions. */
+    /* Ipakita agad ang focused content para madaling gamitin gamit ang keyboard. */
     .portfolio-motion .scroll-reveal:focus-within,
     .portfolio-motion .reveal-immediate {
         transition-duration: 0ms, 0ms, .24s, .22s, .24s, .22s, .2s;
         transition-delay: 0ms;
     }
-    /* A short, transform-only image uncover; screenshots keep their full size. */
+    /* Maikling reveal ito ng screenshot gamit ang transform animation. */
     .portfolio-motion .scroll-reveal.reveal-image {
         opacity: 1;
         translate: none;
@@ -1064,6 +1071,7 @@
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .student-portfolio .portfolio-button:hover {
         transform: translateY(-1px);
@@ -1127,7 +1135,7 @@
     .student-portfolio .project-card:hover .project-cover {
         transform: scale(1.025);
     }
-    /* Match arrow direction to glyph: horizontal arrows slide right, external links lift diagonally. */
+    /* Tugma sa direksyon ng arrow ang galaw nito sa hover. */
     .student-portfolio .project-link:hover span[aria-hidden] {
         transform: translateX(3px);
     }
@@ -1143,12 +1151,14 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 720px) {
     .portfolio-motion .scroll-reveal {
         translate: 0 10px;
     }
 }
 
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     html:has(.portfolio-page) {
         scroll-behavior: auto;
@@ -1169,6 +1179,7 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media print {
     .portfolio-page *, .portfolio-page *::before, .portfolio-page *::after {
         animation: none !important;
@@ -1202,7 +1213,7 @@
     max-width: 100%;
 }
 
-/* Masthead and reading layout */
+/* Header at spacing ng text para madaling basahin ang portfolio. */
 .student-portfolio .portfolio-hero {
     background: radial-gradient(ellipse 80% 60% at 85% 10%, #d5e6fc90, transparent 70%), linear-gradient(180deg, #eff5fd 0%, #e7f0fb 100%);
     color: #102d50;
@@ -1238,15 +1249,18 @@
 .student-portfolio .offering-card { flex-direction: column; justify-content: flex-start; align-items: flex-start; min-height: 0; gap: .6rem; border-top: 3px solid #658cba; }
 .student-portfolio .offering-card p { margin: 0; color: #344e69; line-height: 1.75; }
 .student-portfolio .project-card:only-child { grid-column: 1/-1; }
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (min-width: 721px) {
     .student-portfolio .project-card:only-child:has(.project-media) { display: grid; grid-template-columns: 1.2fr 1fr; }
 }
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 720px) {
     .student-portfolio .hero-inner { grid-template-columns: 1fr; gap: 1.5rem; }
     .student-portfolio .hero-profile { flex-direction: row; width: fit-content; max-width: 100%; align-items: center; justify-self: start; }
     .student-portfolio .profile-avatar-large { width: 4rem; aspect-ratio: 1; font-size: 1.5rem; }
     .student-portfolio .hero-profile-caption { padding: 0 .4rem 0 0; }
 }
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: scroll()) {
         .portfolio-page .workspace-header::after { content: ""; position: absolute; inset: auto 0 0; height: 2px; background: #225bd8; transform-origin: left; animation: portfolio-reading-progress linear both; animation-timeline: scroll(root); }

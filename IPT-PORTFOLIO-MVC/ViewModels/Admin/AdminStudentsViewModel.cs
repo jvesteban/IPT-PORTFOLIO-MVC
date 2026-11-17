@@ -1,3 +1,4 @@
+// Ito ang search, status filter, at results ng admin student directory.
 namespace IPT_PORTFOLIO_MVC.ViewModels.Admin;
 
 public class AdminStudentsViewModel

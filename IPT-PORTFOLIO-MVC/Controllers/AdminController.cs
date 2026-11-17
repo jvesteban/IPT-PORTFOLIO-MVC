@@ -1,3 +1,4 @@
+// Dito kinukuha ang admin reports at pinapagana ang pag-manage ng student accounts.
 using IPT_PORTFOLIO_MVC.Services;
 using System.Globalization;
 using IPT_PORTFOLIO_MVC.Services.Preview;
@@ -12,12 +13,15 @@ namespace IPT_PORTFOLIO_MVC.Controllers;
 public class AdminController(AccountStore accounts) : Controller
 {
     [HttpGet]
+    // Dalhin ang default admin route sa dashboard.
     public IActionResult Index() => RedirectToAction(nameof(Dashboard));
 
     [HttpGet]
+    // Kunin ang student counts, monthly registrations, at recent sign-ins.
     public IActionResult Dashboard()
     {
         var students = accounts.GetStudents();
+        // Gamitin ang oras sa Pilipinas para tama ang pag-group ng registrations kada buwan.
         var localNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(8));
         var thisMonth = new DateTime(localNow.Year, localNow.Month, 1);
         var months = Enumerable.Range(-5, 6).Select(offset => thisMonth.AddMonths(offset)).ToArray();
@@ -46,6 +50,7 @@ public class AdminController(AccountStore accounts) : Controller
     }
 
     [HttpGet]
+    // I-filter ang directory ayon sa pangalan, username, at account status.
     public IActionResult Students(string? search, string? status)
     {
         var students = accounts.GetStudents();
@@ -59,6 +64,7 @@ public class AdminController(AccountStore accounts) : Controller
     }
 
     [HttpGet]
+    // Kunin ang account at portfolio ng student na pinili ng admin.
     public IActionResult Student(string id)
     {
         var student = accounts.GetStudents().FirstOrDefault(item => item.AccountId == id);
@@ -74,6 +80,7 @@ public class AdminController(AccountStore accounts) : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    // I-check ang reason bago baguhin ang status at magpakita ng feedback.
     public IActionResult SetStatus(AdminStudentStatusViewModel model)
     {
         if (!ModelState.IsValid || (model.IsActive == false && string.IsNullOrWhiteSpace(model.Reason)))
@@ -87,6 +94,7 @@ public class AdminController(AccountStore accounts) : Controller
         return RedirectToAction(nameof(Students));
     }
 
+    // Gawing display data ang account summary at kunin ang pangalan sa profile.
     private AdminStudentViewModel ToStudent(PreviewStudentSummary account)
     {
         var profile = accounts.GetProfile(account.AccountId);

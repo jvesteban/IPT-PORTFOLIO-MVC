@@ -1,15 +1,16 @@
+// Migration ito para payagan ang mas mahabang products at services text.
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace IPT_PORTFOLIO_MVC.Migrations
 {
-    /// <inheritdoc />
     public partial class ExpandOfferingDescriptions : Migration
     {
-        /// <inheritdoc />
+        // Ito ang pagbabago sa database kapag in-apply ang migration.
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Palitan ang column definition ng Offering.
             migrationBuilder.AlterColumn<string>(
                 name: "Offering",
                 table: "StudentProfiles",
@@ -20,10 +21,10 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                 oldMaxLength: 2100,
                 oldNullable: true);
         }
-
-        /// <inheritdoc />
+        // Ito ang pagbabalik ng schema kapag ni-rollback ang migration.
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Palitan ang column definition ng Offering.
             migrationBuilder.AlterColumn<string>(
                 name: "Offering",
                 table: "StudentProfiles",

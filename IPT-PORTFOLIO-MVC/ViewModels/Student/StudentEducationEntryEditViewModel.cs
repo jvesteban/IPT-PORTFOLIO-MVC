@@ -1,3 +1,4 @@
+// Ito ang school fields at validation ng isang grade o college year.
 using System.ComponentModel.DataAnnotations;
 
 namespace IPT_PORTFOLIO_MVC.ViewModels.Student;
@@ -22,9 +23,11 @@ public class StudentEducationEntryEditViewModel : IValidatableObject
     [Range(1900, 2100), Display(Name = "End year")]
     public int? EndYear { get; set; }
 
+    // Alamin kung may input sa card para puwedeng manatiling blanko ang unused grade.
     public bool HasDetails => !string.IsNullOrWhiteSpace(SchoolName) || !string.IsNullOrWhiteSpace(CollegeCourse)
         || !string.IsNullOrWhiteSpace(StrandTrack) || StartYear.HasValue || EndYear.HasValue;
 
+    // Kapag may input, kailangan ang school at parehong years na nasa tamang order.
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (!HasDetails) yield break;

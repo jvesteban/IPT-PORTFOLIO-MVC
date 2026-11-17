@@ -1,4 +1,4 @@
-/* Reusable admin components. Page styles define their layout. */
+/* Shared styles ito ng admin buttons, cards, badges, forms, at feedback. */
 .admin-main > :is(.admin-dashboard, .admin-students, .admin-student-detail) {
     display: flex;
     flex-direction: column;
@@ -299,6 +299,7 @@
     line-height: 1.7;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 600px) {
     :root {
         --admin-space: 20px;
@@ -314,6 +315,7 @@
     }
 }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     .admin-feedback {
         animation: admin-feedback-in .28s cubic-bezier(.22, 1, .36, 1) backwards;
@@ -342,6 +344,7 @@
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .admin-area .admin-button:not(:disabled):hover {
         transform: translateY(-1px);

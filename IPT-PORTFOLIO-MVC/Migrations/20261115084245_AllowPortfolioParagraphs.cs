@@ -1,15 +1,16 @@
+// Migration ito para payagan ang mas mahabang about, skills, at hobbies text.
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace IPT_PORTFOLIO_MVC.Migrations
 {
-    /// <inheritdoc />
     public partial class AllowPortfolioParagraphs : Migration
     {
-        /// <inheritdoc />
+        // Ito ang pagbabago sa database kapag in-apply ang migration.
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Palitan ang column definition ng AboutBusiness.
             migrationBuilder.AlterColumn<string>(
                 name: "AboutBusiness",
                 table: "StudentProfiles",
@@ -20,6 +21,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                 oldMaxLength: 2000,
                 oldNullable: true);
 
+            // Palitan ang column definition ng Name.
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Skills",
@@ -29,6 +31,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                 oldType: "nvarchar(100)",
                 oldMaxLength: 100);
 
+            // Palitan ang column definition ng Name.
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Hobbies",
@@ -38,10 +41,10 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                 oldType: "nvarchar(100)",
                 oldMaxLength: 100);
         }
-
-        /// <inheritdoc />
+        // Ito ang pagbabalik ng schema kapag ni-rollback ang migration.
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Palitan ang column definition ng AboutBusiness.
             migrationBuilder.AlterColumn<string>(
                 name: "AboutBusiness",
                 table: "StudentProfiles",
@@ -52,6 +55,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                 oldType: "nvarchar(max)",
                 oldNullable: true);
 
+            // Palitan ang column definition ng Name.
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Skills",
@@ -61,6 +65,7 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
 
+            // Palitan ang column definition ng Name.
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Hobbies",

@@ -1,4 +1,4 @@
-/* Registration card, branding and footer. */
+/* Styles ito ng register card, fields, feedback, at buttons. */
 .register-screen {
     background: #fff;
 }
@@ -101,6 +101,7 @@
     line-height: 1.5;
 }
 
+/* Input size, borders, at text spacing para consistent ang form fields. */
 .register-page .field input {
     width: 100%;
     min-width: 0;
@@ -163,6 +164,7 @@
     outline-offset: 1px;
 }
 
+/* Submit button styles at interaction states ng form. */
 .register-page .submit-button {
     width: 100%;
     height: 50px;
@@ -209,6 +211,7 @@
     text-decoration: underline;
 }
 
+/* Field errors at validation feedback para madaling makita ang kailangang ayusin. */
 .register-page .field-error {
     font-size: 12px;
     line-height: 1.5;
@@ -250,6 +253,7 @@
     line-height: 1.65;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 520px) {
     .register-screen .auth-header {
         padding-top: 32px;
@@ -277,6 +281,7 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 420px) {
     .register-page .field-row {
         grid-template-columns: minmax(0, 1fr);
@@ -284,6 +289,7 @@
     }
 }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     .register-page {
         animation: register-form-enter .32s cubic-bezier(.22, 1, .36, 1);
@@ -295,6 +301,7 @@
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .register-page .submit-button:hover {
         transform: translateY(-1px);
@@ -307,6 +314,7 @@
     }
 }
 
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     .register-page,
     .register-page *,

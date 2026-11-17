@@ -1,3 +1,4 @@
+@* Ito ang edit portfolio form para sa personal details, education, projects, at uploads. *@
 @using IPT_PORTFOLIO_MVC.Services.Preview
 @using IPT_PORTFOLIO_MVC.ViewModels.Student
 @model StudentProfileEditViewModel
@@ -14,6 +15,7 @@
     </header>
     <div class="editor-layout">
         <aside class="editor-sidebar">
+            @* Section links ito para mabilis lumipat sa ibang bahagi ng mahabang form. *@
             <nav class="edit-section-nav student-ui-card" aria-label="Profile sections">
                 <p>ON THIS PAGE</p>
                 <a href="#personal-heading">Personal information</a>
@@ -25,11 +27,13 @@
                 <a href="#projects-heading">Projects</a>
             </nav>
         </aside>
+        @* Multipart form ito para maisama sa POST request ang images at text fields. *@
         <form asp-controller="Student" asp-action="Edit" method="post" enctype="multipart/form-data" class="editor-form">
             <div tabindex="-1" asp-validation-summary="All" class="validation-summary" role="alert">
                 <h2>Check the highlighted fields</h2>
                 <p>Review these details, then save your changes again.</p>
             </div>
+            @* Personal details at profile picture upload ang unang grupo ng fields. *@
             <section class="edit-section student-ui-card" aria-labelledby="personal-heading">
                 <div class="editor-section-heading">
                     <h2 id="personal-heading">Personal information</h2>
@@ -72,6 +76,7 @@
                 </div>
             </section>
 
+            @* Introduction at career goal ang fields para sa personal story. *@
             <section class="edit-section student-ui-card" aria-labelledby="about-heading">
                 <div class="editor-section-heading">
                     <h2 id="about-heading">Introduction and goals</h2>
@@ -91,6 +96,7 @@
                 </div>
             </section>
 
+            @* Optional business, services, at owners details ang nasa grupong ito. *@
             <section class="edit-section student-ui-card" aria-labelledby="business-heading">
                 <div class="editor-section-heading">
                     <h2 id="business-heading">Business details</h2>
@@ -121,6 +127,7 @@
                 </div>
             </section>
 
+            @* Dito nilalagay ang profile email at contact details ng student. *@
             <section class="edit-section student-ui-card" aria-labelledby="contact-heading">
                 <div class="editor-section-heading">
                     <h2 id="contact-heading">Contact information</h2>
@@ -145,6 +152,7 @@
                 </div>
             </section>
 
+            @* Fixed ang education cards; ang checkbox ay para sa blankong fields na puwedeng i-autofill. *@
             <section class="edit-section student-ui-card" aria-labelledby="education-heading">
                 <div class="editor-section-heading">
                     <h2 id="education-heading">Education history</h2>
@@ -177,6 +185,7 @@
                 }
             </section>
 
+            @* Skills at hobbies ang fields dito; blank line ang separator ng paragraphs. *@
             <section class="edit-section student-ui-card" aria-labelledby="interests-heading">
                 <div class="editor-section-heading">
                     <h2 id="interests-heading">Skills and interests</h2>
@@ -196,6 +205,7 @@
                 </div>
             </section>
 
+            @* Dito ine-edit ang projects at optional screenshots bago i-save. *@
             <section class="edit-section student-ui-card" aria-labelledby="projects-heading">
                 <div class="editor-section-heading">
                     <h2 id="projects-heading">Student projects</h2>
@@ -217,6 +227,7 @@
                     }
                 </div>
                 <button type="button" class="add-project-button student-button is-soft" data-add-project hidden>Add project</button>
+                @* Kinokopya ito ng JavaScript kapag nagdagdag ng bagong project card. *@
                 <template data-project-template>
                     @{
                         var projectTemplateData = new ViewDataDictionary(ViewData);
@@ -236,6 +247,7 @@
             <span class="student-sr-only" id="save-feedback" role="status" aria-live="polite"></span>
         </form>
     </div>
+    @* Ipakita ang choices kapag aalis sa page na may unsaved changes. *@
     <dialog id="leave-editor" aria-labelledby="leave-editor-title" aria-describedby="leave-editor-description">
         <h2 id="leave-editor-title">Discard unsaved changes?</h2>
         <p id="leave-editor-description">Your portfolio edits haven’t been saved.</p>
@@ -245,9 +257,11 @@
         </div>
     </dialog>
 </div>
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles {
     <link rel="stylesheet" href="~/css/Student/Edit.css" asp-append-version="true" />
 }
+@* Page-specific scripts ito para sa interactions at validation. *@
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <partial name="_ValidationScriptsPartial" />

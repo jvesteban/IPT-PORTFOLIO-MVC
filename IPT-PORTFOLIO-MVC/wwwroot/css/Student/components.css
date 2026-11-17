@@ -1,4 +1,5 @@
-/* Shared student tokens and UI components. Page files own their layout. */
+/* Shared styles ito ng student buttons, cards, forms, at feedback. */
+/* Shared colors, spacing, at ibang values na ginagamit sa file na ito. */
 :root {
     --student-blue: #225bd8;
     --student-blue-hover: #1949b3;
@@ -308,12 +309,14 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 600px) {
     .student-field :is(input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]), select, textarea) {
         font-size: 16px;
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .student-button:not(.is-text):not(:disabled):hover {
         transform: translateY(-1px);
@@ -323,6 +326,7 @@
     }
 }
 
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     .student-button,
     .student-field label,

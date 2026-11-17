@@ -1,3 +1,4 @@
+// Pinagsasama nito ang account summary at portfolio para sa admin student view.
 using IPT_PORTFOLIO_MVC.ViewModels.Student;
 
 namespace IPT_PORTFOLIO_MVC.ViewModels.Admin;

@@ -1,3 +1,4 @@
+@* Ito ang admin dashboard na nagpapakita ng actual student counts, charts, at recent logins. *@
 @using System.Globalization
 @model IPT_PORTFOLIO_MVC.ViewModels.Admin.AdminDashboardViewModel
 @{
@@ -19,6 +20,7 @@
         </a>
     </header>
 
+    @* Summary cards ito mula sa current database counts. *@
     <div class="metrics-row">
         <div class="metric-card admin-card">
             <span class="metric-label">Total registered</span>
@@ -39,6 +41,7 @@
 
     <div class="chart-grid">
 
+        @* Active at inactive counts ang basehan ng doughnut chart at tooltip. *@
         <section class="chart-panel admin-card" aria-labelledby="status-heading">
             <div class="panel-heading admin-panel-heading">
                 <div>
@@ -78,6 +81,7 @@
             </div>
         </section>
 
+        @* Bawat bar ay registrations sa isang buwan sa nakaraang anim na buwan. *@
         <section class="chart-panel admin-card" aria-labelledby="registrations-heading">
             <div class="panel-heading admin-panel-heading">
                 <div>
@@ -109,6 +113,7 @@
         </section>
     </div>
 
+    @* Ipakita ang recent sign-ins, o empty message kung wala pang activity. *@
     <section class="activity-panel admin-card" aria-labelledby="activity-heading">
         <div class="panel-heading admin-panel-heading">
             <div>
@@ -151,5 +156,7 @@
 
     <p class="preview-caption">Student activity as of this page load.</p>
 </div>
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles { <link rel="stylesheet" href="~/css/admin/dashboard.css" asp-append-version="true" /> }
+@* Page-specific scripts ito para sa interactions at validation. *@
 @section Scripts { <script src="~/js/admin/dashboard.js" asp-append-version="true"></script> }

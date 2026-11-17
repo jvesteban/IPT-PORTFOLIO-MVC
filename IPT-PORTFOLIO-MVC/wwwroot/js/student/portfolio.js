@@ -1,3 +1,4 @@
+// Dito gumagana ang scroll reveals, active section links, at education accordion animations.
 (() => {
     const portfolio = document.querySelector(".student-portfolio");
     if (!portfolio) return;
@@ -7,7 +8,8 @@
     const targets = new Map();
     let observer;
 
-    // Stagger within each local group, rather than delaying a whole long section.
+    // Maikling pagitan lang ang reveal ng magkakatabing items.
+    // I-group ang magkakatabing items para may maikling pagitan ang kanilang reveal.
     function collect(selector, step = 60, limit = 180) {
         const groups = new Map();
         portfolio.querySelectorAll(selector).forEach(item => {
@@ -31,12 +33,14 @@
         targets.set(media, { index: (cardTiming?.index ?? 0) + 1, step: 60, limit: 180 });
     });
 
+    // Ipakita ang item at ihinto ang pag-observe para isang beses lang ang reveal.
     function reveal(item, immediate = false) {
         if (immediate) item.classList.add("reveal-immediate");
         item.classList.add("is-visible");
         observer?.unobserve(item);
     }
 
+    // I-set ang observer at i-adjust ang animations sa screen size at motion preference.
     function configureReveals() {
         observer?.disconnect();
         const enabled = !reducedMotion.matches && "IntersectionObserver" in window;
@@ -62,12 +66,12 @@
                 reveal(item, true);
                 return;
             }
-            // Keep completed reveals visible through resize and preference changes.
+            // Panatilihing visible ang tapos nang animation kahit mag-resize ang screen.
             if (!item.classList.contains("is-visible")) observer.observe(item);
         });
     }
 
-    // Highlight active section link in the portfolio navbar while scrolling.
+    // I-highlight ang section link na tugma sa kasalukuyang scroll position.
     const sectionLinks = [...document.querySelectorAll('.student-navbar-links a[href^="#"]')];
     const trackedSections = sectionLinks
         .map(link => ({ link, target: document.getElementById(link.getAttribute("href").slice(1)) }))
@@ -75,6 +79,7 @@
     let activeSectionLink = null;
     let spyQueued = false;
 
+    // I-update ang active look at screen reader state ng section link.
     function setActiveSectionLink(link) {
         if (link === activeSectionLink) return;
         activeSectionLink = link;
@@ -86,6 +91,7 @@
         });
     }
 
+    // Hanapin ang section na nasa reading area habang nag-scroll.
     function updateActiveSectionLink() {
         spyQueued = false;
         if (!trackedSections.length) return;
@@ -105,6 +111,7 @@
         setActiveSectionLink(current);
     }
 
+    // Pagsamahin ang scroll updates sa isang animation frame.
     function scheduleSectionSpy() {
         if (spyQueued) return;
         spyQueued = true;
@@ -117,7 +124,7 @@
         updateActiveSectionLink();
     }
 
-    // Animate every Education accordion consistently on both expand and collapse.
+    // Pareho ang style ng animation sa pagbukas at pagsara ng education panels.
     const supportsWaapi = typeof Element.prototype.animate === "function";
 
     portfolio.querySelectorAll(".academic-stage").forEach(stage => {
@@ -130,6 +137,7 @@
         let isClosing = false;
         let isExpanding = false;
 
+        // Linisin ang temporary styles pagkatapos ng accordion animation.
         function resetAnimationState() {
             stage.style.height = "";
             stage.style.overflow = "";
@@ -140,6 +148,7 @@
             isExpanding = false;
         }
 
+        // I-stop ang current animation bago magsimula ng panibagong open o close.
         function cancelRunning() {
             if (heightAnim) {
                 heightAnim.onfinish = null;
@@ -153,6 +162,7 @@
             }
         }
 
+        // I-animate ang taas at content habang binubuksan ang education panel.
         function expand() {
             const wasClosing = isClosing;
             const startHeight = stage.getBoundingClientRect().height;
@@ -185,6 +195,7 @@
             };
         }
 
+        // I-animate ang pagsara at isara ang panel pagkatapos ng transition.
         function shrink() {
             const startHeight = stage.getBoundingClientRect().height;
             const startOpacity = parseFloat(window.getComputedStyle(content).opacity) || 1;
@@ -239,8 +250,8 @@
         });
     });
 
-    // Native anchor scrolling stays intact. The observer handles arrivals, including
-    // deep links, without revealing offscreen descendants ahead of the viewport.
+    // Normal pa rin ang section links; observer ang nagpapakita ng content pagdating sa screen.
+    // Ipakita agad ang focused content para magamit ito ng keyboard users.
     document.addEventListener("focusin", event => {
         if (!(event.target instanceof Element) || !portfolio.contains(event.target)) return;
         const block = event.target.closest(".scroll-reveal");

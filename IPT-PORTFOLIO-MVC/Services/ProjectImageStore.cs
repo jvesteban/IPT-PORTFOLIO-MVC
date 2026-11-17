@@ -1,3 +1,4 @@
+// Dito chine-check at sine-save ang project screenshots sa App_Data/ProjectImages.
 using System.Security.Cryptography;
 using System.Text;
 namespace IPT_PORTFOLIO_MVC.Services;
@@ -6,9 +7,11 @@ public sealed class ProjectImageStore(IWebHostEnvironment environment)
 {
     public const int MaximumBytes = ProfilePhotoStore.MaximumBytes;
     private string Folder => Path.Combine(environment.ContentRootPath, "App_Data", "ProjectImages");
+    // Isama ang account at image ID sa hashed file name para may sariling path ang screenshot.
     private string ImagePath(string accountId, string imageId) =>
         Path.Combine(Folder, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountId + ":" + imageId))) + ".image");
 
+    // Basahin nang may size limit at i-check ang actual image type ng upload.
     public async Task<(byte[]? Bytes, string? Error)> ValidateAsync(IFormFile image, CancellationToken cancellationToken)
     {
         if (image.Length == 0 || image.Length > MaximumBytes)
@@ -27,6 +30,7 @@ public sealed class ProjectImageStore(IWebHostEnvironment environment)
             ? (null, "Choose a JPG, PNG, or WebP image.") : (bytes, null);
     }
 
+    // I-save ang validated screenshot gamit ang bagong image ID.
     public async Task<string> SaveAsync(string accountId, byte[] bytes, CancellationToken cancellationToken)
     {
         Directory.CreateDirectory(Folder);
@@ -37,11 +41,13 @@ public sealed class ProjectImageStore(IWebHostEnvironment environment)
         return id;
     }
 
+    // Alisin ang screenshot gamit ang valid image ID at owner account.
     public void Delete(string accountId, string imageId)
     {
         if (Guid.TryParseExact(imageId, "N", out _)) File.Delete(ImagePath(accountId, imageId));
     }
 
+    // Basahin ang valid image reference at ibalik ang screenshot kung nandoon pa ito.
     public async Task<(byte[] Bytes, string ContentType)?> ReadAsync(string accountId, string imageId, CancellationToken cancellationToken)
     {
         if (!Guid.TryParseExact(imageId, "N", out _)) return null;

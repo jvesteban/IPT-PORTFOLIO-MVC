@@ -1,3 +1,4 @@
+// Dito ibinibigay ang screenshot na naka-link sa project ng student.
 using IPT_PORTFOLIO_MVC.Services;
 using IPT_PORTFOLIO_MVC.Services.Preview;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ namespace IPT_PORTFOLIO_MVC.Controllers;
 public sealed class ProjectImagesController(ProjectImageStore images, AccountStore accounts) : Controller
 {
     [HttpGet]
+    // I-check muna kung kabilang sa student project ang image bago ibigay ang file.
     public async Task<IActionResult> Show(string? id, string? image, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(image)

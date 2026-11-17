@@ -1,3 +1,4 @@
+// Dito fina-filter ang student cards habang nagta-type sa dashboard search.
 (() => {
     const toolbar = document.querySelector(".directory-toolbar");
     const search = document.querySelector("#student-search");
@@ -8,6 +9,7 @@
     const empty = document.querySelector("#search-empty");
     toolbar.hidden = false;
 
+    // Ipakita lang ang cards na tugma ang pangalan at i-update ang result count.
     function filterStudents() {
         const query = search.value.trim().toLocaleLowerCase();
         let visible = 0;

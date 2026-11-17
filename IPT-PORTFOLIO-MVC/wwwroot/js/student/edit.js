@@ -1,3 +1,4 @@
+// Dito gumagana ang edit form validation, education autofill, uploads, at unsaved changes dialog.
 (() => {
     const form = document.querySelector(".edit-profile form");
     if (!form) return;
@@ -6,11 +7,13 @@
     let clientValidationAttempted = false;
     let refreshingRecords = false;
 
+    // Hindi puwedeng mas maaga ang end year kaysa sa start year.
     $.validator.addMethod("educationEndYear", (value, input) => {
         const start = input.closest("[data-school-record]").querySelector('[data-field="StartYear"]').value;
         return !value || !start || Number(value) >= Number(start);
     }, "End year must be the same as or later than start year.");
 
+    // HTTP o HTTPS lang ang valid na project link, at puwedeng blanko ang optional link.
     $.validator.addMethod("projectWebUrl", value => {
         if (!value.trim()) return true;
         try {
@@ -21,6 +24,7 @@
         }
     }, "Use a full http:// or https:// project link, or leave it blank.");
 
+    // I-refresh ang validation kapag nagdagdag o nag-alis ng project card.
     function updateValidation() {
         $(form).data("validator")?.destroy();
         $(form).removeData("unobtrusiveValidation");
@@ -72,9 +76,10 @@
         normalizeDescriptions();
     }
 
+    // Panatilihing valid ang links ng fields sa help text at validation messages.
     function normalizeDescriptions() {
-        // Unobtrusive validation can remove its generated message element after success.
-        // Keep the stable field message container and remove dangling references.
+        // Puwedeng mawala ang generated error message kapag valid na ang field.
+        // Alisin ang lumang references para tama pa rin ang screen reader help text.
         form.querySelectorAll("[aria-describedby]").forEach(input => {
             const ids = input.getAttribute("aria-describedby").split(/\s+/)
                 .filter(id => document.getElementById(id));
@@ -83,6 +88,7 @@
         });
     }
 
+    // Ilipat ang keyboard focus sa error summary para madaling makita ang kailangang ayusin.
     function focusErrorSummary() {
         window.requestAnimationFrame(() => {
             const summary = form.querySelector(".validation-summary-errors");
@@ -92,6 +98,7 @@
 
 
     document.querySelectorAll("[data-education-level]").forEach(setupEducationAutofill);
+    // I-set up ang autofill checkbox para sa isang education level.
     function setupEducationAutofill(level) {
         const controls = level.querySelector("[data-autofill-controls]");
         const checkbox = controls.querySelector("[data-autofill]");
@@ -102,6 +109,7 @@
         const normalize = value => value.trim().replace(/\s+/g, " ").toLowerCase();
         const generated = new Map();
 
+        // Enable lang ang autofill kung pareho ang schools, course o strand at valid ang unang card.
         function eligibility() {
             for (const field of ["SchoolName", "CollegeCourse", "StrandTrack"]) {
                 const distinct = new Set(rows.map(row => normalize(values(row)[field] || "")).filter(Boolean));
@@ -115,6 +123,7 @@
                 return "Check the first card. Use valid years from 1900 to 2100.";
             return "";
         }
+        // I-update ang checkbox at paliwanag kung ready o blocked ang autofill.
         function refreshEligibility() {
             const reason = eligibility();
             checkbox.disabled = Boolean(reason);
@@ -128,6 +137,7 @@
             refreshEligibility();
         });
         checkbox.addEventListener("change", () => {
+            // Sa uncheck, ibalik ang dating values ng fields na pinunan ng autofill.
             if (!checkbox.checked) {
                 for (const [input, original] of generated) input.value = original;
                 generated.clear();
@@ -151,6 +161,7 @@
                 const end = current.EndYear || +start + duration;
                 if (+start < 1900 || +end > 2100 || +end < +start ||
                     fields(row).some(input => !input.validity.valid)) return;
+                // Unang card ang basehan ng school at year range; blankong fields lang ang pupunan.
                 const proposed = { ...first, StartYear: start, EndYear: end };
                 fields(row).forEach(input => {
                     const value = proposed[input.dataset.field];
@@ -176,11 +187,13 @@
     const projectEmpty = form.querySelector("[data-project-empty]");
 
 
+    // Bitawan ang temporary preview URL para hindi manatili sa browser memory.
     function releaseProjectImage(row) {
         const url = projectImageUrls.get(row);
         if (url) URL.revokeObjectURL(url);
         projectImageUrls.delete(row);
     }
+    // I-set up ang preview, upload checks, remove, at undo ng isang project image.
     function initializeProjectImage(row) {
         const editor = row.querySelector("[data-project-image]");
         const input = row.querySelector('[data-project-field="Image"]');
@@ -190,6 +203,7 @@
         const remove = editor.querySelector("[data-remove-image]");
         const restore = editor.querySelector("[data-restore-image]");
         const feedback = editor.querySelector("[data-image-feedback]");
+        // Ipakita ang saved image o placeholder ayon sa kasalukuyang remove flag.
         function showSaved() {
             releaseProjectImage(row);
             const src = flag.value === "true" ? "" : editor.dataset.savedSrc;
@@ -201,6 +215,7 @@
         }
         showSaved();
         input.addEventListener("change", async () => {
+            // Alamin ang pinakabagong selection para hindi mapalitan ng naunang image preview.
             const version = (projectImageVersions.get(row) || 0) + 1;
             projectImageVersions.set(row, version);
             const file = input.files[0];
@@ -260,6 +275,7 @@
         projectImageUrls.clear();
     });
 
+    // Gamitin ang typed title bilang heading ng project card.
     function updateProjectHeading(row) {
         const title = row.querySelector('[data-project-field="Title"]').value.trim();
         row.querySelector("[data-project-heading]").textContent = title || "New project";
@@ -268,6 +284,7 @@
         remove.setAttribute("aria-label", title ? "Remove project " + title : "Remove empty project");
     }
 
+    // Ayusin ang field names at IDs para tama ang pag-bind ng project list sa server.
     function reindexProjects() {
         projectList.querySelectorAll("[data-project-record]").forEach((row, index) => {
             row.querySelectorAll("[data-project-field]").forEach(input => {
@@ -298,6 +315,7 @@
 
     addProject.hidden = false;
     projectList.querySelectorAll("[data-project-record]").forEach(row => { updateProjectHeading(row); initializeProjectImage(row); });
+    // Kopyahin ang project template at i-setup ang bagong card bago mag-input.
     addProject.addEventListener("click", () => {
         const fragment = form.querySelector("[data-project-template]").content.cloneNode(true);
         const row = fragment.querySelector("[data-project-record]");
@@ -312,6 +330,7 @@
     projectList.addEventListener("input", event => {
         if (event.target.dataset.projectField === "Title") updateProjectHeading(event.target.closest("[data-project-record]"));
     });
+    // Alisin ang napiling project card at ayusin ulit ang field indexes.
     projectList.addEventListener("click", event => {
         const remove = event.target.closest("[data-remove-project]");
         if (!remove) return;
@@ -327,6 +346,7 @@
     updateValidation();
     focusErrorSummary();
 
+    // Magpakita ng Saving state at pigilan ang paulit-ulit na save habang may request.
     const saveButton = form.querySelector("[data-save-button]");
     const saveLabel = saveButton.textContent;
     const saveFeedback = document.getElementById("save-feedback");
@@ -354,6 +374,7 @@
     })).filter(item => item.heading);
     let currentLink;
     let queued = false;
+    // I-highlight ang kasalukuyang section sa edit form navigation.
     function setCurrentSection(link) {
         if (link === currentLink) return;
         currentLink = link;
@@ -364,6 +385,7 @@
             else item.link.removeAttribute("aria-current");
         });
     }
+    // Hanapin ang form section na malapit sa ilalim ng page header.
     function updateCurrentSection() {
         queued = false;
         const header = document.querySelector(".workspace-header").getBoundingClientRect().height;
@@ -376,6 +398,7 @@
         }
         setCurrentSection(current.link);
     }
+    // Isang update lang kada frame para magaan ang scroll tracking.
     function scheduleSectionUpdate() {
         if (queued) return;
         queued = true;
@@ -391,6 +414,7 @@
     window.addEventListener("resize", scheduleSectionUpdate);
     updateCurrentSection();
 
+    // I-preview ang bagong profile picture pagkatapos ma-check ang type at size.
     const photoInput = form.querySelector("#ProfilePicture");
     const preview = document.querySelector("#profile-photo-preview");
     const photoFeedback = document.querySelector("#photo-feedback");
@@ -438,6 +462,7 @@
         if (previewUrl) URL.revokeObjectURL(previewUrl);
     });
 
+    // Kumuha ng form values para maikumpara kung may unsaved edits.
     function editorSnapshot() {
         return JSON.stringify([...new FormData(form)].map(([name, value]) => [
             name, value instanceof File ? [value.name, value.size, value.lastModified && value.name ? value.lastModified : 0] : value
@@ -454,6 +479,7 @@
         }
     }, true);
     logout.addEventListener("submit", event => { if (!event.defaultPrevented) leaving = true; });
+    // Gamitin ang browser confirmation kapag may unsaved edits at nag-refresh o umalis.
     window.addEventListener("beforeunload", event => {
         if (leaving || form.getAttribute("aria-busy") === "true" ||
             (!hadServerErrors && editorSnapshot() === original)) return;
@@ -461,6 +487,7 @@
         event.returnValue = "";
     });
     window.addEventListener("pageshow", () => { leaving = false; });
+    // Ipakita ang Keep editing at Discard changes kapag aalis sa edit page.
     const leaveDialog = document.querySelector("#leave-editor");
     let destination;
     document.addEventListener("click", event => {

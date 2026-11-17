@@ -1,11 +1,12 @@
+// Dito inaayos ang profile data para pareho ang details sa student at admin view.
 using IPT_PORTFOLIO_MVC.ViewModels.Student;
 
 namespace IPT_PORTFOLIO_MVC.Services.Preview;
 
-// Both portfolio views consume the same display model. An EF-backed reader can
-// supply this model later without making the views depend on database entities.
+// Pareho ang display model ng student at admin para tugma ang ipinapakitang portfolio.
 public static class PreviewPortfolioMapper
 {
+    // Kopyahin ang profile fields at gumawa ng image URL para sa bawat may screenshot na project.
     public static StudentPortfolioViewModel ToViewModel(
         PreviewStudentProfile profile, bool isOwnPortfolio, Func<string, string?> projectImageUrl) => new()
     {

@@ -1,3 +1,4 @@
+// Dito gumagana ang mobile navbar at active section links ng student pages.
 (() => {
     const navbar = document.querySelector(".student-navbar");
     if (!navbar) return;
@@ -14,11 +15,13 @@
     document.body.classList.add("student-nav-ready");
     toggle.hidden = false;
 
+    // Isara ang mobile menu at ibalik ang button sa closed state.
     function closeMenu() {
         toggle.setAttribute("aria-expanded", "false");
         navbar.classList.remove("is-menu-open");
     }
 
+    // Markahan ang link ng section na kasalukuyang binabasa.
     function setActiveLink(link) {
         if (link === activeLink) return;
         activeLink = link;
@@ -30,9 +33,10 @@
         });
     }
 
+    // Hanapin ang section na dumaan na sa ilalim ng fixed navbar.
     function updateSectionState() {
         updateQueued = false;
-        // Track a reading line below the sticky header, including anchor arrivals.
+        // Sa ilalim ng fixed header ang basehan kung aling section ang active.
         const offset = navbar.getBoundingClientRect().bottom + Math.min(96, window.innerHeight * .14);
         let current;
         sections.forEach(item => {
@@ -44,6 +48,7 @@
         setActiveLink(current?.link);
     }
 
+    // Isang update lang kada animation frame para magaan ang scroll handling.
     function scheduleSectionState() {
         if (updateQueued) return;
         updateQueued = true;
@@ -71,6 +76,7 @@
         }
     });
 
+    // Kapag Escape ang pinindot, isara ang menu at ibalik ang focus sa toggle.
     document.addEventListener("keydown", event => {
         if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
             closeMenu();

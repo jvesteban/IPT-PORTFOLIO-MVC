@@ -1,5 +1,7 @@
+<!-- Project settings ito para sa ASP.NET Core MVC app at EF Core packages. -->
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <!-- .NET version, nullable checks, at local User Secrets ID ng project. -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -8,6 +10,7 @@
     <UserSecretsId>IPT-Portfolio-MVC-Local</UserSecretsId>
   </PropertyGroup>
 
+  <!-- Packages ito na kailangan ng app para sa EF Core at SQL Server. -->
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14">

@@ -1,3 +1,4 @@
+// Ito ang edit form fields at server validation bago i-save ang portfolio.
 using IPT_PORTFOLIO_MVC.Services.Preview;
 using System.ComponentModel.DataAnnotations;
 
@@ -5,6 +6,7 @@ namespace IPT_PORTFOLIO_MVC.ViewModels.Student;
 
 public class StudentProfileEditViewModel : IValidatableObject
 {
+    // Sa server itinatakda ang owner ID para hindi mapalitan gamit ang form request.
     [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
     public string StudentId { get; set; } = string.Empty;
 
@@ -48,19 +50,23 @@ public class StudentProfileEditViewModel : IValidatableObject
     public List<StudentEducationEditViewModel> Education { get; set; } =
         EducationLevels.Select(level => new StudentEducationEditViewModel { Level = level }).ToList();
 
+    // Blank line ang separator ng magkakahiwalay na skill at hobby paragraphs.
     public static string[] SplitParagraphs(string? value) => (value ?? string.Empty)
         .ReplaceLineEndings("\n").Split("\n\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
+    // Bawat non-empty line ay isang item sa services o owners list.
     public static string[] SplitLines(string? value) => (value ?? string.Empty)
         .Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
         .ToArray();
 
+    // I-check ang birthday, fixed education cards, project list, at owners limits sa server.
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (Projects is null || Projects.Any(project => project is null))
             yield return new("Use the project cards provided.", [nameof(Projects)]);
         if (BirthDate is { } date && (date.Year < 1900 || date > DateOnly.FromDateTime(DateTime.Today)))
             yield return new("Enter a birthday between 1900 and today.", [nameof(BirthDate)]);
+        // Dapat kumpleto ang apat na levels at tugma ang submitted grades sa fixed cards.
         if (Education?.Count != 4 || Education.Any(item => item is null))
             yield return new("Use the four education sections provided.", [nameof(Education)]);
         else

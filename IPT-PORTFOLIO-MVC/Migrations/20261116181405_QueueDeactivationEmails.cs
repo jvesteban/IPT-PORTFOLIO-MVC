@@ -1,3 +1,4 @@
+// Migration ito para itabi sa database ang pending deactivation emails.
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -5,12 +6,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IPT_PORTFOLIO_MVC.Migrations
 {
-    /// <inheritdoc />
     public partial class QueueDeactivationEmails : Migration
     {
-        /// <inheritdoc />
+        // Ito ang pagbabago sa database kapag in-apply ang migration.
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Buuin ang table na PendingDeactivationEmails.
             migrationBuilder.CreateTable(
                 name: "PendingDeactivationEmails",
                 columns: table => new
@@ -31,10 +32,10 @@ namespace IPT_PORTFOLIO_MVC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
         }
-
-        /// <inheritdoc />
+        // Ito ang pagbabalik ng schema kapag ni-rollback ang migration.
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Alisin ang table na PendingDeactivationEmails.
             migrationBuilder.DropTable(
                 name: "PendingDeactivationEmails");
         }

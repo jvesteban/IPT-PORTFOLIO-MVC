@@ -1,4 +1,4 @@
-/* Student directory and portfolio cards. */
+/* Styles ito ng student search at portfolio cards sa dashboard. */
 .student-dashboard {
     display: grid;
     gap: 32px;
@@ -82,6 +82,7 @@
     font-size: 13px;
 }
 
+/* Search controls at result count sa student directory. */
 .directory-toolbar {
     display: grid;
     grid-template-columns: auto minmax(180px, 380px) 1fr;
@@ -172,12 +173,14 @@
     color: var(--student-muted);
 }
 
+/* Grid ng portfolio cards na nag-a-adjust ayon sa available na lapad. */
 .student-dashboard .student-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 22px;
 }
 
+/* Card surface at details ng bawat student portfolio. */
 .student-dashboard .student-card {
     display: flex;
     flex-direction: column;
@@ -287,12 +290,14 @@
     margin: 0;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 1000px) {
     .student-dashboard .student-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 600px) {
     .student-dashboard .dashboard-heading {
         padding: 24px;
@@ -332,6 +337,7 @@
     }
 }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     .dashboard-page .workspace-main {
         animation: none;
@@ -359,6 +365,7 @@
     border-color: #93b3e8;
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .student-dashboard .student-card:hover {
         transform: translateY(-2px);
@@ -377,6 +384,7 @@
     }
 }
 
+/* Bawasan o alisin ang animations kapag iyon ang preference ng device. */
 @media (prefers-reduced-motion: reduce) {
     .student-dashboard .dashboard-heading,
     .student-dashboard .student-card {

@@ -1,6 +1,7 @@
+// Ito ang project details at image URL na ginagamit ng portfolio preview.
 namespace IPT_PORTFOLIO_MVC.ViewModels.Student;
 
-// Project details displayed by the portfolio preview.
+// Title, description, link, at optional screenshot ang ipinapakita sa project card.
 public sealed class StudentProjectViewModel
 {
     public string? ImageUrl { get; init; }

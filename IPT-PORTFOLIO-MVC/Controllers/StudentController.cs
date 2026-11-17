@@ -1,3 +1,4 @@
+// Dito dumadaan ang student dashboard, portfolio preview, at pag-save ng edits.
 using Microsoft.AspNetCore.Mvc;
 using IPT_PORTFOLIO_MVC.ViewModels.Student;
 using Microsoft.AspNetCore.Authorization;
@@ -11,12 +12,15 @@ namespace IPT_PORTFOLIO_MVC.Controllers;
 [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
 public class StudentController(AccountStore accounts, ProfilePhotoStore photos, ProjectImageStore projectImages, ILogger<StudentController> logger) : Controller
 {
+    // Sa login cookie kinukuha ang owner ID para sarili lang niyang profile ang ma-edit.
     private string CurrentAccountId => User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
     [HttpGet]
+    // Dalhin ang default student route sa dashboard.
     public IActionResult Index() => RedirectToAction(nameof(Dashboard));
 
     [HttpGet]
+    // Ipakita ang lahat ng student cards at unahin ang card ng naka-login na user.
     public IActionResult Dashboard()
     {
         var ownerId = CurrentAccountId;
@@ -41,6 +45,7 @@ public class StudentController(AccountStore accounts, ProfilePhotoStore photos, 
     }
 
     [HttpGet]
+    // Buksan ang napiling portfolio at alamin kung ang viewer ang owner nito.
     public IActionResult Portfolio(string? id)
     {
         var profile = accounts.GetProfile(id ?? CurrentAccountId);
@@ -51,6 +56,7 @@ public class StudentController(AccountStore accounts, ProfilePhotoStore photos, 
     }
 
     [HttpGet]
+    // Ilagay sa edit form ang kasalukuyang saved profile, projects, at education.
     public IActionResult Edit()
     {
         var profile = accounts.GetProfile(CurrentAccountId);
@@ -70,6 +76,7 @@ public class StudentController(AccountStore accounts, ProfilePhotoStore photos, 
                 ProjectId = project.ProjectId,
                 CurrentImageUrl = project.ImageId is null ? null : Url.Action("Show", "ProjectImages", new { id = profile.AccountId, image = project.ImageId })
             }).ToList(),
+            // Gumawa ng fixed card kada grade kahit wala pang saved school details.
             Education = StudentProfileEditViewModel.EducationLevels.Select(level =>
             {
                 var existing = profile.Education.FirstOrDefault(item => item.Level == level);
@@ -96,11 +103,13 @@ public class StudentController(AccountStore accounts, ProfilePhotoStore photos, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    // I-check ang form at uploads bago i-save ang edits ng naka-login na student.
     public async Task<IActionResult> Edit(StudentProfileEditViewModel model, CancellationToken cancellationToken)
     {
         model.StudentId = CurrentAccountId;
         var existingProfile = accounts.GetProfile(CurrentAccountId);
         if (existingProfile is null) return NotFound();
+        // I-check muna ang project images para may field error kapag invalid ang upload.
         var imageBytes = new Dictionary<StudentProjectEditViewModel, byte[]>();
         var newImages = new Dictionary<StudentProjectEditViewModel, string>();
         for (var i = 0; i < (model.Projects?.Count ?? 0); i++)
@@ -123,6 +132,7 @@ public class StudentController(AccountStore accounts, ProfilePhotoStore photos, 
                 ModelState.AddModelError($"Projects[{i}].Image", "Could not read this image. Choose it again.");
             }
         }
+        // I-save lang ang bagong profile picture kapag pasado ang form validation.
         if (ModelState.IsValid && model.ProfilePicture is not null)
         {
             try
@@ -151,6 +161,7 @@ public class StudentController(AccountStore accounts, ProfilePhotoStore photos, 
                 ModelState.AddModelError("Projects", "Project images could not be saved. Please choose them again and retry.");
             }
         }
+        // Ibalik ang inputs at image references sa form para maitama ang errors.
         if (!ModelState.IsValid)
         {
             model.Projects = (model.Projects ?? []).Where(project => project is not null).ToList();
@@ -171,6 +182,7 @@ public class StudentController(AccountStore accounts, ProfilePhotoStore photos, 
             return View(model);
         }
 
+        // Linisin ang text at ayusin ang form data bago ipasa sa database service.
         var profile = new PreviewStudentProfile
         {
             FirstName = model.FirstName.Trim(), MiddleName = model.MiddleName?.Trim() ?? string.Empty,
@@ -207,12 +219,14 @@ public class StudentController(AccountStore accounts, ProfilePhotoStore photos, 
             foreach (var image in newImages.Values) DeleteUnusedProjectImage(image);
             return NotFound();
         }
+        // Pagkatapos ma-save ang profile, alisin ang project images na hindi na ginagamit.
         var retainedImages = profile.Projects.Select(project => project.ImageId).ToHashSet();
         foreach (var image in existingProfile.Projects.Select(project => project.ImageId).OfType<string>().Where(image => !retainedImages.Contains(image)))
             DeleteUnusedProjectImage(image);
         TempData["ProfileSaved"] = "Your profile has been updated.";
         return RedirectToAction(nameof(Portfolio));
     }
+    // Subukang alisin ang lumang screenshot at i-log kung hindi ma-delete ang file.
     private void DeleteUnusedProjectImage(string imageId)
     {
         try { projectImages.Delete(CurrentAccountId, imageId); }

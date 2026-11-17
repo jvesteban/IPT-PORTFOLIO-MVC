@@ -1,3 +1,4 @@
+// Ito ang registration fields at rules para sa pangalan, username, at password.
 using System.ComponentModel.DataAnnotations;
 
 namespace IPT_PORTFOLIO_MVC.ViewModels.Account;
@@ -21,6 +22,7 @@ public class RegisterViewModel
 
     [Required, DataType(DataType.Password)]
     [Display(Name = "Confirm password")]
+    // Dapat pareho ang password at confirmation bago payagan ang registration.
     [Compare(nameof(Password), ErrorMessage = "Your passwords do not match.")]
     public string ConfirmPassword { get; set; } = string.Empty;
 }

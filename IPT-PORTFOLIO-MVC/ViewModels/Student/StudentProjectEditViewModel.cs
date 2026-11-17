@@ -1,3 +1,4 @@
+// Ito ang project fields, optional upload, at rules bago i-save ang project.
 using System.ComponentModel.DataAnnotations;
 
 namespace IPT_PORTFOLIO_MVC.ViewModels.Student;
@@ -8,6 +9,7 @@ public sealed class StudentProjectEditViewModel : IValidatableObject
     [Display(Name = "Project image")]
     public IFormFile? Image { get; set; }
     public bool RemoveImage { get; set; }
+    // Sa server kinukuha ang saved image URL para trusted ang reference na ipapakita.
     [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
     public string? CurrentImageUrl { get; set; }
 
@@ -20,9 +22,11 @@ public sealed class StudentProjectEditViewModel : IValidatableObject
     [StringLength(500), Display(Name = "Project link")]
     public string? ProjectUrl { get; set; }
 
+    // Alamin kung may laman o upload ang project card bago ito i-save.
     public bool HasDetails => !string.IsNullOrWhiteSpace(Title)
         || !string.IsNullOrWhiteSpace(Description) || !string.IsNullOrWhiteSpace(ProjectUrl) || Image is not null;
 
+    // Kailangan ng title ang may laman na project, at HTTP o HTTPS lang ang link.
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (!HasDetails) yield break;

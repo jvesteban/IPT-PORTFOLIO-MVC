@@ -1,3 +1,4 @@
+@* Ito ang student dashboard na may sariling card at cards ng ibang students. *@
 @model IPT_PORTFOLIO_MVC.ViewModels.Student.StudentDashboardViewModel
 @{
     Layout = "_StudentLayout";
@@ -6,7 +7,7 @@
 }
 
 <div class="student-dashboard">
-    <!-- Welcome Hero Panel -->
+    @* Greeting at portfolio count ng naka-login na student. *@
     <header class="dashboard-heading">
         <div class="heading-content">
             <h1>Welcome back, <span class="highlight-name">@Model.FirstName</span></h1>
@@ -20,7 +21,7 @@
         </div>
     </header>
 
-    <!-- Main Section: Portfolio Card -->
+    @* Student directory ito na may search, View button, at owner card marker. *@
     <section class="portfolio-section" aria-labelledby="portfolio-heading">
         <div class="section-heading">
             <div>
@@ -80,10 +81,12 @@
 
 </div>
 
+@* Page-specific scripts ito para sa interactions at validation. *@
 @section Scripts {
     <script src="~/js/student/dashboard.js" asp-append-version="true"></script>
 }
 
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles {
     <link rel="stylesheet" href="~/css/Student/StudDashboard.css" asp-append-version="true" />
 }

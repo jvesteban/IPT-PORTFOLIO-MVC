@@ -1,3 +1,4 @@
+// Dito binabasa at sine-save ang accounts at portfolio data gamit ang EF Core.
 using IPT_PORTFOLIO_MVC.Data;
 using IPT_PORTFOLIO_MVC.Models.Entities;
 using IPT_PORTFOLIO_MVC.Services.Preview;
@@ -11,6 +12,7 @@ public sealed class AccountStore(ApplicationDbContext db)
 {
     private readonly PasswordHasher<User> hasher = new();
 
+    // Gumawa ng student account at kasamang profile kapag available ang username.
     public bool TryRegister(string username, string firstName, string lastName, string password)
     {
         username = username.Trim();
@@ -22,9 +24,11 @@ public sealed class AccountStore(ApplicationDbContext db)
             Username = username, FullName = $"{firstName} {lastName}", UserRole = "Student",
             StudentProfile = new StudentProfile { FirstName = firstName, LastName = lastName }
         };
+        // Hash ang sine-save para ma-check ang password nang hindi iniimbak ang mismong text nito.
         user.PasswordHash = hasher.HashPassword(user, password);
         db.Users.Add(user);
         try { db.SaveChanges(); }
+        // Hawakan ang duplicate username kahit sabay dumating ang registration requests.
         catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
         {
             return false;
@@ -32,6 +36,7 @@ public sealed class AccountStore(ApplicationDbContext db)
         return true;
     }
 
+    // I-check ang password, account status, at role bago payagan ang login.
     public User? Authenticate(string username, string password, out bool deactivated)
     {
         deactivated = false;
@@ -46,8 +51,7 @@ public sealed class AccountStore(ApplicationDbContext db)
             deactivated = true;
             return null;
         }
-        // SSMS can store either casing under the database's case-insensitive collation.
-        // Issue the exact role names required by ASP.NET Core authorization policies.
+        // Gawing eksaktong Admin o Student ang role para tumugma sa access rules ng app.
         var role = user.UserRole.Trim();
         if (role.Equals("Admin", StringComparison.OrdinalIgnoreCase)) user.UserRole = "Admin";
         else if (role.Equals("Student", StringComparison.OrdinalIgnoreCase)) user.UserRole = "Student";
@@ -59,9 +63,11 @@ public sealed class AccountStore(ApplicationDbContext db)
         return user;
     }
 
+    // Hanapin ang account sa database gamit ang numeric account ID.
     public User? FindById(string? accountId) => int.TryParse(accountId, out var id)
         ? db.Users.AsNoTracking().SingleOrDefault(u => u.UserId == id) : null;
 
+    // Kunin ang student account summaries para sa admin lists at reports.
     public IReadOnlyList<PreviewStudentSummary> GetStudents() =>
         db.Users.AsNoTracking().Where(u => u.UserRole == "Student")
             .Select(u => new { u.UserId, u.Username, u.IsActive, u.CreatedAt, u.LastLoginAt }).AsEnumerable()
@@ -69,6 +75,7 @@ public sealed class AccountStore(ApplicationDbContext db)
                 DateTime.SpecifyKind(u.CreatedAt, DateTimeKind.Utc),
                 u.LastLoginAt is DateTime time ? DateTime.SpecifyKind(time, DateTimeKind.Utc) : null)).ToArray();
 
+    // I-save sa isang transaction ang status change at pending email nito.
     public string? SetStudentActive(string accountId, bool isActive, string? reason)
     {
         if (!int.TryParse(accountId, out var id)) return null;
@@ -79,6 +86,7 @@ public sealed class AccountStore(ApplicationDbContext db)
             return student.Any() ? "The account already has this status." : null;
 
         string notice;
+        // Kapag na-reactivate, alisin ang pending deactivation notice ng student.
         if (isActive)
         {
             db.PendingDeactivationEmails.Where(e => e.UserId == id).ExecuteDelete();
@@ -90,6 +98,7 @@ public sealed class AccountStore(ApplicationDbContext db)
                 .Select(c => c.Email).SingleOrDefault()?.Trim();
             if (System.Net.Mail.MailAddress.TryCreate(email, out var address) && address.Address == email)
             {
+                // Sa email ng profile ipapadala ang reason ng deactivation.
                 db.PendingDeactivationEmails.Add(new PendingDeactivationEmail
                 {
                     UserId = id, Recipient = email, Reason = reason!.Trim(), NextAttemptAt = DateTime.UtcNow
@@ -103,6 +112,7 @@ public sealed class AccountStore(ApplicationDbContext db)
         return notice;
     }
 
+    // Kunin ang basic profile details na kailangan ng dashboard cards.
     public IReadOnlyList<PreviewStudentProfile> GetProfiles() => db.StudentProfiles.AsNoTracking()
         .Where(p => p.User.UserRole == "Student").Select(p => new PreviewStudentProfile
         {
@@ -110,10 +120,12 @@ public sealed class AccountStore(ApplicationDbContext db)
             Introduction = p.Introduction ?? ""
         }).ToArray();
 
+    // Isama sa profile query ang contact, interests, projects, at education records.
     private IQueryable<StudentProfile> Profiles => db.StudentProfiles.Where(p => p.User.UserRole == "Student")
         .Include(p => p.ContactInformation).Include(p => p.Skills).Include(p => p.Hobbies)
         .Include(p => p.Projects).Include(p => p.EducationHistory).AsSplitQuery();
 
+    // Buuin ang portfolio details mula sa profile at mga naka-link na tables.
     public PreviewStudentProfile? GetProfile(string? accountId)
     {
         if (!int.TryParse(accountId, out var id)) return null;
@@ -137,8 +149,10 @@ public sealed class AccountStore(ApplicationDbContext db)
         };
     }
 
+    // Hatiin ang saved text sa magkakahiwalay na non-empty lines.
     private static string[] Lines(string? value) => (value ?? "").Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
+    // I-update ang personal details at mga naka-link na portfolio records.
     public bool UpdateProfile(string accountId, PreviewStudentProfile input)
     {
         if (!int.TryParse(accountId, out var id)) return false;
@@ -156,6 +170,7 @@ public sealed class AccountStore(ApplicationDbContext db)
         p.Offering = string.Join("\n", input.Offerings);
         p.Owner = string.Join("\n", input.Owners);
         p.UpdatedAt = DateTime.UtcNow;
+        // Gumawa ng contact record kung first time pa lang maglalagay ng contact details.
         p.ContactInformation ??= new ContactInformation();
         p.ContactInformation.Email = input.Email;
         p.ContactInformation.Phone = input.ContactPhone;
@@ -165,6 +180,7 @@ public sealed class AccountStore(ApplicationDbContext db)
         foreach (var name in input.Skills) p.Skills.Add(new Skill { Name = name, DisplayOrder = p.Skills.Count });
         p.Hobbies.Clear();
         foreach (var name in input.Hobbies) p.Hobbies.Add(new Hobby { Name = name, DisplayOrder = p.Hobbies.Count });
+        // Panatilihin ang existing project IDs at alisin ang projects na wala na sa submitted list.
         var oldProjects = p.Projects.ToDictionary(x => x.ProjectId.ToString());
         var order = 0;
         foreach (var item in input.Projects)
@@ -181,6 +197,7 @@ public sealed class AccountStore(ApplicationDbContext db)
             project.DisplayOrder = order++;
         }
         db.Projects.RemoveRange(oldProjects.Values);
+        // Itugma ang school record sa level at grade para isang record lang kada fixed card.
         var oldEducation = p.EducationHistory.ToDictionary(e => (e.EducationLevel, e.Grade));
         order = 0;
         foreach (var level in input.Education)

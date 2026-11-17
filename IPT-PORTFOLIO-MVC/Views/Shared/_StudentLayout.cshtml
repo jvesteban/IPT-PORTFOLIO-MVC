@@ -1,3 +1,4 @@
+@* Ito ang shared navbar, footer, styles, at scripts ng student pages. *@
 @{
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
     var isDashboard = currentAction.Equals("Dashboard", StringComparison.OrdinalIgnoreCase)
@@ -21,6 +22,7 @@
 <body class="@ViewData["BodyClass"]">
     <a class="skip-link" href="#student-content">Skip to content</a>
     <div class="student-shell">
+        @* Iisang navbar frame ang ginagamit sa dashboard, edit, at portfolio. *@
         <header class="workspace-header">
             <div class="student-navbar">
                 <a class="student-navbar-brand" href="@brandHref" title="@navigationBrand">@navigationBrand</a>
@@ -41,6 +43,7 @@
                     </nav>
                     <div class="student-navbar-actions">
                         @await RenderSectionAsync("WorkspaceActions", required: false)
+                        @* POST form ang logout at may shared confirmation dialog bago ito ituloy. *@
                         <form asp-controller="Account" asp-action="Logout" data-signout method="post">
                             <button class="student-navbar-button student-button is-secondary" type="submit">Sign out</button>
                         </form>
@@ -49,6 +52,7 @@
             </div>
         </header>
         <main class="workspace-main" id="student-content" tabindex="-1">@RenderBody()</main>
+        @* Shared footer ito para pareho ang spacing at links sa student pages. *@
         <footer class="workspace-footer">
             <div class="footer-inner">
                 <span>© @DateTime.Now.Year Student Portfolio · IPT Project</span>

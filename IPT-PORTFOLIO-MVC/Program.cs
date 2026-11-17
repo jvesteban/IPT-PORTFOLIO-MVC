@@ -1,3 +1,4 @@
+// Dito nagsisimula ang app at sine-set up ang services, login, database, at routes.
 using IPT_PORTFOLIO_MVC.Services;
 using IPT_PORTFOLIO_MVC.Data;
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +8,14 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// I-register ang MVC at services para magamit sila ng controllers at background worker.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<AccountStore>();
 builder.Services.AddHostedService<DeactivationEmailWorker>();
 builder.Services.AddSingleton<IPT_PORTFOLIO_MVC.Services.ProfilePhotoStore>();
 builder.Services.AddSingleton<IPT_PORTFOLIO_MVC.Services.ProjectImageStore>();
-// Recheck account status and role for each authenticated request.
+// Bawat request, i-check ulit kung active pa ang account at tama pa ang role.
+// Bagong run ID kada start para bumalik sa login ang lumang session kapag ni-restart ang app.
 var applicationRun = Guid.NewGuid().ToString("N");
 builder.Services.AddAuthentication("Student")
     .AddCookie("Student", options =>
@@ -25,11 +27,13 @@ builder.Services.AddAuthentication("Student")
         options.Cookie.SameSite = SameSiteMode.Lax;
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         options.SlidingExpiration = true;
+        // Itabi sa login cookie kung saang run ng app ginawa ang session.
         options.Events.OnSigningIn = context =>
         {
             context.Properties.Items["ApplicationRun"] = applicationRun;
             return Task.CompletedTask;
         };
+        // I-reject ang lumang session o account na na-deactivate o nagbago ang role.
         options.Events.OnValidatePrincipal = async context =>
         {
             if (!context.Properties.Items.TryGetValue("ApplicationRun", out var run) || run != applicationRun)
@@ -48,6 +52,7 @@ builder.Services.AddAuthentication("Student")
             }
         };
     });
+// Admin at Student ang roles na kailangan para sa kani-kanilang pages.
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Student", policy => policy
@@ -57,27 +62,30 @@ builder.Services.AddAuthorization(options =>
         .RequireAuthenticatedUser()
         .RequireRole("Admin"));
 });
+// Dito ginagamit ang SQL Server connection string para sa EF Core.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Ayusin ang order ng error handling, routing, login checks, at page routes.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Account/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    // Sa production, sabihan ang browser na gumamit ng HTTPS para sa site.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
+// Basahin muna ang login cookie bago i-check ang access sa route.
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
+// Login page ang default na bubukas kapag walang controller at action sa URL.
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}")

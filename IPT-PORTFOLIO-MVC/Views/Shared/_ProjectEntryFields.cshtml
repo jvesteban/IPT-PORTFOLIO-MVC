@@ -1,12 +1,15 @@
+@* Fields ito ng isang project card, kasama ang optional screenshot, title, at website link. *@
 @model IPT_PORTFOLIO_MVC.ViewModels.Student.StudentProjectEditViewModel
 
 <div class="project-editor-card" data-project-record role="group" aria-labelledby="@(Html.IdFor(m => m.Title))-heading">
+    @* Hidden values ito para ma-match ang saved project at malaman kung aalisin ang image. *@
     <input asp-for="ProjectId" type="hidden" data-project-meta="ProjectId" />
     <input type="hidden" name="@(Html.NameFor(m => m.RemoveImage))" value="@(Model.RemoveImage ? "true" : "false")" data-project-meta="RemoveImage" />
     <div class="project-record-heading">
         <h3 id="@(Html.IdFor(m => m.Title))-heading" data-project-heading>@(string.IsNullOrWhiteSpace(Model.Title) ? "New project" : Model.Title)</h3>
         <button type="button" class="student-button is-danger" data-remove-project hidden>Remove</button>
     </div>
+    @* Preview at image actions ito; sa Save pa lang ia-apply ang upload o removal. *@
     <div class="project-image-editor" data-project-image data-saved-src="@Model.CurrentImageUrl">
         <div class="project-image-preview">
             <img src="@Model.CurrentImageUrl" alt="Project image preview" data-image-preview hidden="@(Model.CurrentImageUrl is null || Model.RemoveImage)" />

@@ -1,4 +1,4 @@
-/* Read-only student record. Uses the shared admin components. */
+/* Styles ito ng student details na tinitingnan ng admin. */
 .admin-student-detail .detail-nav-bar {
     display: flex;
     align-items: center;
@@ -308,12 +308,14 @@
     color: #435874;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 1100px) {
     .admin-student-detail .detail-grid {
         grid-template-columns: minmax(0, 1fr);
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 580px) {
     .admin-student-detail .detail-project-grid {
         grid-template-columns: minmax(0, 1fr);
@@ -343,6 +345,7 @@
     max-width: 100%;
 }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     .admin-student-detail .detail-nav-bar {
         animation: admin-detail-in .24s cubic-bezier(.22, 1, .36, 1) backwards;
@@ -362,6 +365,7 @@
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .admin-student-detail .detail-project-card:hover {
         border-color: #b5c9e8;

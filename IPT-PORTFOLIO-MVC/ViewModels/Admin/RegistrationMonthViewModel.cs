@@ -1,3 +1,4 @@
+// Ito ang label, bilang, at taas ng isang bar sa monthly registrations chart.
 namespace IPT_PORTFOLIO_MVC.ViewModels.Admin;
 
 public class RegistrationMonthViewModel

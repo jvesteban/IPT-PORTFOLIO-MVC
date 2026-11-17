@@ -1,3 +1,4 @@
+// Ito ang lahat ng details na kailangan ipakita sa portfolio preview.
 using IPT_PORTFOLIO_MVC.Services.Preview;
 
 namespace IPT_PORTFOLIO_MVC.ViewModels.Student;
@@ -24,10 +25,12 @@ public class StudentPortfolioViewModel
     public IReadOnlyList<string> Hobbies { get; init; } = [];
     public IReadOnlyList<StudentProjectViewModel> Projects { get; init; } = [];
 
+    // Pagsamahin ang name parts at laktawan ang blankong middle name.
     public string FullName => string.Join(" ",
         new[] { FirstName, MiddleName, LastName }
             .Where(part => !string.IsNullOrWhiteSpace(part)));
 
+    // Kunin ang first at last initials, o ST kung wala pang pangalan.
     public string Initials
     {
         get

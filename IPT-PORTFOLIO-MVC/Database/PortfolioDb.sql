@@ -1,8 +1,10 @@
--- Run in SSMS on the target SQL Server instance.
--- EF Core uses __EFMigrationsHistory to apply only pending migrations.
+-- Patakbuhin sa SSMS sa SQL Server na gagamitin ng project.
+-- Gagamitin ang migration history para ang pending changes lang ang ma-apply.
+-- Schema lang ito; bagong database ay walang student accounts o portfolio records.
 USE [master];
 GO
 
+-- Gumawa ng database kung wala pa, bago lumipat sa PortfolioDb.
 IF DB_ID(N'PortfolioDb') IS NULL
 BEGIN
     CREATE DATABASE [PortfolioDb];
@@ -12,8 +14,10 @@ GO
 USE [PortfolioDb];
 GO
 
+-- Dito itinatala ng EF Core kung aling migrations ang applied na.
 IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
         [ProductVersion] nvarchar(32) NOT NULL,
@@ -28,6 +32,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [Users] (
         [UserId] int NOT NULL IDENTITY,
         [FullName] nvarchar(201) NOT NULL,
@@ -48,6 +53,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [StudentProfiles] (
         [StudentProfileId] int NOT NULL IDENTITY,
         [UserId] int NOT NULL,
@@ -73,6 +79,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [ContactInformation] (
         [ContactInformationId] int NOT NULL IDENTITY,
         [StudentProfileId] int NOT NULL,
@@ -91,6 +98,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [EducationHistory] (
         [EducationHistoryId] int NOT NULL IDENTITY,
         [StudentProfileId] int NOT NULL,
@@ -113,6 +121,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [Hobbies] (
         [HobbyId] int NOT NULL IDENTITY,
         [StudentProfileId] int NOT NULL,
@@ -128,6 +137,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [Projects] (
         [ProjectId] int NOT NULL IDENTITY,
         [StudentProfileId] int NOT NULL,
@@ -146,6 +156,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [Skills] (
         [SkillId] int NOT NULL IDENTITY,
         [StudentProfileId] int NOT NULL,
@@ -161,6 +172,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [SocialLinks] (
         [SocialLinkId] int NOT NULL IDENTITY,
         [StudentProfileId] int NOT NULL,
@@ -178,6 +190,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- I-set ang index para sa lookup o unique rule ng table.
     CREATE UNIQUE INDEX [IX_ContactInformation_StudentProfileId] ON [ContactInformation] ([StudentProfileId]);
 END;
 
@@ -186,6 +199,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- I-set ang index para sa lookup o unique rule ng table.
     CREATE UNIQUE INDEX [IX_EducationHistory_StudentProfileId_EducationLevel_Grade] ON [EducationHistory] ([StudentProfileId], [EducationLevel], [Grade]);
 END;
 
@@ -194,6 +208,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- I-set ang index para sa lookup o unique rule ng table.
     CREATE INDEX [IX_Hobbies_StudentProfileId] ON [Hobbies] ([StudentProfileId]);
 END;
 
@@ -202,6 +217,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- I-set ang index para sa lookup o unique rule ng table.
     CREATE INDEX [IX_Projects_StudentProfileId] ON [Projects] ([StudentProfileId]);
 END;
 
@@ -210,6 +226,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- I-set ang index para sa lookup o unique rule ng table.
     CREATE INDEX [IX_Skills_StudentProfileId] ON [Skills] ([StudentProfileId]);
 END;
 
@@ -218,6 +235,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- I-set ang index para sa lookup o unique rule ng table.
     CREATE INDEX [IX_SocialLinks_StudentProfileId] ON [SocialLinks] ([StudentProfileId]);
 END;
 
@@ -226,6 +244,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- I-set ang index para sa lookup o unique rule ng table.
     CREATE UNIQUE INDEX [IX_StudentProfiles_UserId] ON [StudentProfiles] ([UserId]);
 END;
 
@@ -234,6 +253,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- I-set ang index para sa lookup o unique rule ng table.
     CREATE UNIQUE INDEX [IX_Users_Username] ON [Users] ([Username]);
 END;
 
@@ -242,6 +262,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261114120031_CreatePortfolioTables'
 )
 BEGIN
+    -- Markahan ang migration bilang applied kapag successful ang changes.
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20261114120031_CreatePortfolioTables', N'10.0.14');
 END;
@@ -261,6 +282,7 @@ BEGIN
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[StudentProfiles]') AND [c].[name] = N'AboutBusiness');
     IF @var IS NOT NULL EXEC(N'ALTER TABLE [StudentProfiles] DROP CONSTRAINT ' + @var + ';');
+    -- I-apply ang pagbabago sa field ng existing table.
     ALTER TABLE [StudentProfiles] ALTER COLUMN [AboutBusiness] nvarchar(max) NULL;
 END;
 
@@ -275,6 +297,7 @@ BEGIN
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Skills]') AND [c].[name] = N'Name');
     IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Skills] DROP CONSTRAINT ' + @var1 + ';');
+    -- I-apply ang pagbabago sa field ng existing table.
     ALTER TABLE [Skills] ALTER COLUMN [Name] nvarchar(max) NOT NULL;
 END;
 
@@ -289,6 +312,7 @@ BEGIN
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Hobbies]') AND [c].[name] = N'Name');
     IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Hobbies] DROP CONSTRAINT ' + @var2 + ';');
+    -- I-apply ang pagbabago sa field ng existing table.
     ALTER TABLE [Hobbies] ALTER COLUMN [Name] nvarchar(max) NOT NULL;
 END;
 
@@ -297,6 +321,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261115084245_AllowPortfolioParagraphs'
 )
 BEGIN
+    -- Markahan ang migration bilang applied kapag successful ang changes.
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20261115084245_AllowPortfolioParagraphs', N'10.0.14');
 END;
@@ -316,6 +341,7 @@ BEGIN
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[StudentProfiles]') AND [c].[name] = N'Offering');
     IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [StudentProfiles] DROP CONSTRAINT ' + @var3 + ';');
+    -- I-apply ang pagbabago sa field ng existing table.
     ALTER TABLE [StudentProfiles] ALTER COLUMN [Offering] nvarchar(max) NULL;
 END;
 
@@ -324,6 +350,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261115090629_ExpandOfferingDescriptions'
 )
 BEGIN
+    -- Markahan ang migration bilang applied kapag successful ang changes.
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20261115090629_ExpandOfferingDescriptions', N'10.0.14');
 END;
@@ -337,6 +364,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261116181405_QueueDeactivationEmails'
 )
 BEGIN
+    -- Buuin ang table at ang fields at links nito.
     CREATE TABLE [PendingDeactivationEmails] (
         [UserId] int NOT NULL,
         [Recipient] nvarchar(256) NOT NULL,
@@ -352,6 +380,7 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20261116181405_QueueDeactivationEmails'
 )
 BEGIN
+    -- Markahan ang migration bilang applied kapag successful ang changes.
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20261116181405_QueueDeactivationEmails', N'10.0.14');
 END;
@@ -359,7 +388,7 @@ END;
 COMMIT;
 GO
 
-/* Example admin statistics query: */
+/* Sample query ito para mabilang ang active at inactive users. */
 -- SELECT COUNT(*) AS TotalUsers,
 --        SUM(CASE WHEN IsActive = 1 THEN 1 ELSE 0 END) AS ActiveUsers,
 --        SUM(CASE WHEN IsActive = 0 THEN 1 ELSE 0 END) AS InactiveUsers

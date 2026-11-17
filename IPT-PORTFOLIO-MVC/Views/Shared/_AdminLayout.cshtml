@@ -1,3 +1,4 @@
+@* Ito ang shared sidebar, header, footer, styles, at scripts ng admin pages. *@
 @{
     var action = ViewContext.RouteData.Values["action"]?.ToString();
     var isOverview = string.Equals(action, "Dashboard", StringComparison.OrdinalIgnoreCase) || string.Equals(action, "Index", StringComparison.OrdinalIgnoreCase);
@@ -27,6 +28,7 @@
                     Menu <span aria-hidden="true">☰</span>
                 </button>
             </div>
+            @* I-highlight ang active admin route sa shared sidebar. *@
             <nav class="admin-nav" id="admin-navigation" aria-label="Admin navigation">
                 <a asp-controller="Admin" asp-action="Dashboard" class="nav-item @(isOverview ? "active" : "")" aria-current="@(isOverview ? "page" : null)">
                     <span class="nav-indicator" aria-hidden="true"></span>
@@ -47,6 +49,7 @@
                 </div>
                 <div class="admin-actions">
                     <span class="admin-badge">Administrator</span>
+                    @* Shared logout confirmation ang gamit bago i-submit ang logout form. *@
                     <form asp-controller="Account" asp-action="Logout" data-signout method="post" class="logout-form" data-admin-submit>
                         <button type="submit" class="admin-button is-secondary" data-loading-text="Signing out…">Sign out</button>
                     </form>

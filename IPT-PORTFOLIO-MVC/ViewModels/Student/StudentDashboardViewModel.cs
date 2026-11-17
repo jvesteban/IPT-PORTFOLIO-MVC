@@ -1,3 +1,4 @@
+// Ito ang greeting name at student cards para sa dashboard.
 namespace IPT_PORTFOLIO_MVC.ViewModels.Student;
 
 public class StudentDashboardViewModel

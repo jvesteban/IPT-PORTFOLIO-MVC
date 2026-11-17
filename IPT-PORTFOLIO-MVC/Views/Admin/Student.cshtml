@@ -1,3 +1,4 @@
+@* Dito tinitingnan ng admin ang account at portfolio details ng napiling student. *@
 @using System.Globalization
 @model IPT_PORTFOLIO_MVC.ViewModels.Admin.AdminStudentDetailsViewModel
 @{
@@ -32,6 +33,7 @@
 
     <div class="detail-grid">
 
+        @* Account details at dates ito ng napiling student. *@
         <section class="detail-panel admin-card" aria-labelledby="detail-section-1">
             <div class="panel-header">
                 <h2 id="detail-section-1">Account information</h2>
@@ -72,6 +74,7 @@
             </dl>
         </section>
 
+        @* Saved introduction at career goal ang ipinapakita rito. *@
         <section class="detail-panel admin-card" aria-labelledby="detail-section-2">
             <div class="panel-header">
                 <h2 id="detail-section-2">About the student</h2>
@@ -95,6 +98,7 @@
             </div>
         </section>
 
+        @* Business, services, owners, at contact fields mula sa portfolio ang ipinapakita rito. *@
         <section class="detail-panel admin-card" aria-labelledby="detail-section-3">
             <div class="panel-header"><h2 id="detail-section-3">Business and contact information</h2></div>
             <dl class="detail-dl">
@@ -106,6 +110,7 @@
                 <div class="detail-row"><dt>Location</dt><dd>@(string.IsNullOrWhiteSpace(Model.Profile.ContactAddress) ? "Not added yet" : Model.Profile.ContactAddress)</dd></div>
             </dl>
         </section>
+        @* Saved skills at hobbies ang ipinapakita sa listahan. *@
         <section class="detail-panel admin-card" aria-labelledby="detail-section-4">
             <div class="panel-header">
                 <h2 id="detail-section-4">Skills &amp; interests</h2>
@@ -144,12 +149,14 @@
                 }
             </div>
         </section>
+        @* Shared education cards ang gamit para tugma sa student preview. *@
         <section class="detail-panel education-panel admin-card" aria-labelledby="detail-section-5">
             <div class="panel-header">
                 <h2 id="detail-section-5">Education history</h2>
             </div>
             <partial name="_EducationCards" model="Model.Profile.Education" />
         </section>
+        @* Project details at optional screenshots ang makikita ng admin rito. *@
         <section class="detail-panel projects-panel admin-card" aria-labelledby="detail-projects-heading">
             <div class="panel-header projects-panel-heading">
                 <h2 id="detail-projects-heading">Student projects</h2>
@@ -199,6 +206,7 @@
 
     <p class="preview-caption">Student profile details are displayed in read-only mode for administrative verification. Account status can be adjusted from the Student Directory.</p>
 </div>
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles {
     <link rel="stylesheet" href="~/css/education-cards.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin/student.css" asp-append-version="true" />

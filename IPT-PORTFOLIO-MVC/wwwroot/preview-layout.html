@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Static design preview ito; ang sample values dito ay hindi galing sa student database. -->
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -35,7 +36,7 @@
             min-height: 100vh;
         }
 
-        /* Top Switcher Bar */
+        /* Styles ng controls para lumipat sa sample page views. */
         .preview-toolbar {
             position: sticky;
             top: 0;
@@ -119,7 +120,7 @@
 
         .vp-btn:hover { background: #475569; }
 
-        /* Canvas Wrapper */
+        /* Frame ng design preview at sample device widths. */
         .preview-canvas-wrap {
             padding: 24px;
             display: flex;
@@ -138,7 +139,7 @@
             min-height: 800px;
         }
 
-        /* View Panels */
+        /* Ipakita lang ang sample panel na currently selected. */
         .preview-view { display: none; }
         .preview-view.active { display: block; }
 
@@ -284,7 +285,7 @@
         .panel-header h3 { font-size: 16px; font-weight: 700; color: var(--ink); }
         .panel-header span { font-size: 12px; color: var(--muted); }
 
-        /* Donut representation */
+        /* Sample doughnut chart para makita ang chart design. */
         .donut-wrap {
             display: flex;
             align-items: center;
@@ -337,7 +338,7 @@
         .dot-ind.active { background: var(--blue); }
         .dot-ind.inactive { background: #94a3b8; }
 
-        /* Bar Chart */
+        /* Sample bar chart para makita ang labels at layout. */
         .bars-container {
             display: flex;
             align-items: flex-end;
@@ -366,7 +367,7 @@
         .bar-col span { font-size: 11px; font-weight: 600; color: var(--muted); }
 
         /* -------------------------------------------------------------------------
-           2. ADMIN STUDENTS TABLE
+           Sample design ng admin student directory.
            ------------------------------------------------------------------------- */
         .table-filter-bar {
             display: flex;
@@ -576,7 +577,7 @@
 </head>
 <body>
 
-    <!-- Top Preview Controller -->
+    <!-- Controls para pumili ng sample view at preview size. -->
     <header class="preview-toolbar">
         <div class="toolbar-brand">
             <span class="toolbar-badge">Interactive Preview</span>
@@ -597,11 +598,11 @@
         </div>
     </header>
 
-    <!-- Canvas Frame Container -->
+    <!-- Dito ipinapakita ang napiling design preview. -->
     <main class="preview-canvas-wrap">
         <div id="previewFrame" class="preview-frame">
 
-            <!-- 1. ADMIN OVERVIEW -->
+            <!-- Sample design ng admin dashboard. -->
             <section id="admin-overview" class="preview-view active">
                 <div class="admin-shell">
                     <aside class="admin-sidebar">
@@ -786,7 +787,7 @@
                 </div>
             </section>
 
-            <!-- 3. STUDENT DASHBOARD -->
+            <!-- Sample design ng student dashboard cards. -->
             <section id="student-dashboard" class="preview-view">
                 <div class="student-preview-shell">
                     <div class="student-header">
@@ -831,7 +832,7 @@
                 </div>
             </section>
 
-            <!-- 4. STUDENT PORTFOLIO -->
+            <!-- Sample design ng student portfolio details. -->
             <section id="student-portfolio" class="preview-view">
                 <div class="student-preview-shell">
                     <div style="background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-card);">
@@ -881,6 +882,7 @@
     </main>
 
     <script>
+        // Lumipat sa napiling preview panel at i-highlight ang tab button.
         function switchView(viewId, btn) {
             document.querySelectorAll('.preview-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -888,6 +890,7 @@
             btn.classList.add('active');
         }
 
+        // Baguhin ang lapad ng preview para makita ang sample device size.
         function setDeviceWidth(width) {
             document.getElementById('previewFrame').style.maxWidth = width;
         }

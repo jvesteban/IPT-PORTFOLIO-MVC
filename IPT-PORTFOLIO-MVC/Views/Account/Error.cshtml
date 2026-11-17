@@ -1,3 +1,4 @@
+@* Ito ang page para sa error at access denied messages. *@
 @{
     ViewData["Title"] = "Error";
 }
@@ -8,6 +9,7 @@
     <a asp-controller="Account" asp-action="Login">Back to sign in</a>
 </div>
 
+@* Page-specific CSS ito na idinadagdag sa shared layout. *@
 @section Styles {
     <link rel="stylesheet" href="~/css/account/error.css" asp-append-version="true" />
 }

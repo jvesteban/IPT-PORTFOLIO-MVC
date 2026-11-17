@@ -1,3 +1,4 @@
+// Ito ang pinagsamang profile data na ginagamit sa edit form at portfolio preview.
 namespace IPT_PORTFOLIO_MVC.Services.Preview;
 
 public sealed record PreviewStudentProfile

@@ -1,4 +1,4 @@
-/* Directory layout, table and mobile account cards. */
+/* Styles ito ng student directory, filters, table, at mobile layout. */
 .admin-students .students-panel {
     overflow: hidden;
 }
@@ -9,6 +9,7 @@
     border-bottom: 1px solid var(--admin-line);
 }
 
+/* Spacing at alignment ng search at status filters. */
 .admin-students .student-filters {
     display: grid;
     grid-template-columns: minmax(180px, 1fr) 160px auto;
@@ -32,6 +33,7 @@
     scrollbar-color: #c3d1e4 #f7f9fc;
 }
 
+/* Table columns, rows, at cell spacing ng student directory. */
 .admin-students .students-table {
     width: 100%;
     min-width: 830px;
@@ -159,6 +161,7 @@
     font-size: 12px;
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 1150px) {
     .admin-students .student-filters {
         grid-template-columns: minmax(0, 1fr) auto;
@@ -168,6 +171,7 @@
     }
 }
 
+/* I-adjust ang layout kapag tugma ang screen sa size na ito. */
 @media (max-width: 680px) {
     .admin-students .list-heading {
         padding: 20px 18px;
@@ -251,6 +255,7 @@
     outline-offset: -3px;
 }
 
+/* Animations na tatakbo lang kapag allowed ang motion sa device. */
 @media (prefers-reduced-motion: no-preference) {
     .admin-students .page-heading {
         animation: admin-students-in .26s cubic-bezier(.22, 1, .36, 1) backwards;
@@ -266,6 +271,7 @@
     }
 }
 
+/* Hover animations para sa devices na may mouse at allowed ang motion. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     .admin-students tbody tr:hover .student-initials .profile-photo {
         transform: scale(1.06);
