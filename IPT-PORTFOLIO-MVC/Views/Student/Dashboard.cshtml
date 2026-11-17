@@ -1,0 +1,89 @@
+@model IPT_PORTFOLIO_MVC.ViewModels.Student.StudentDashboardViewModel
+@{
+    Layout = "_StudentLayout";
+    ViewData["Title"] = "Student dashboard";
+    ViewData["BodyClass"] = "dashboard-page";
+}
+
+<div class="student-dashboard">
+    <!-- Welcome Hero Panel -->
+    <header class="dashboard-heading">
+        <div class="heading-content">
+            <h1>Welcome back, <span class="highlight-name">@Model.FirstName</span></h1>
+            <p class="heading-desc">Explore your fellow students' portfolios and build your own.</p>
+        </div>
+        <div class="quick-stats">
+            <div class="stat-item">
+                <span class="stat-number">@Model.Students.Count</span>
+                <span class="stat-label">Registered Students</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Section: Portfolio Card -->
+    <section class="portfolio-section" aria-labelledby="portfolio-heading">
+        <div class="section-heading">
+            <div>
+                <h2 id="portfolio-heading">Student Portfolios</h2>
+                <p class="section-subtext">Meet the people behind the portfolios.</p>
+            </div>
+            <a class="dashboard-edit-link student-button is-secondary" asp-action="Edit">Edit my portfolio &rarr;</a>
+        </div>
+
+        <div class="directory-toolbar" hidden>
+            <label for="student-search">Find a student</label>
+            <div class="directory-search">
+                <input id="student-search" type="search" placeholder="Search by name…" autocomplete="off" />
+                <button type="button" id="clear-search" class="student-button is-text">Clear</button>
+            </div>
+            <p id="search-results" role="status" aria-live="polite">@Model.Students.Count @(Model.Students.Count == 1 ? "portfolio" : "portfolios")</p>
+        </div>
+        <p id="search-empty" class="directory-empty" hidden>No students found. Try another name.</p>
+        <div class="student-grid">
+        @foreach (var student in Model.Students)
+        {
+        <article class="student-card student-ui-card @(student.IsOwnPortfolio ? "is-own" : "")" aria-labelledby="student-@student.StudentId">
+            <div class="card-cover" aria-hidden="true">
+                <div class="student-avatar">
+                    <partial name="_ProfileAvatar" model='new IPT_PORTFOLIO_MVC.ViewModels.Shared.ProfileAvatarViewModel(student.StudentId, student.Initials)' />
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-top">
+                    @if (student.IsOwnPortfolio)
+                    {
+                        <span class="status-chip">Your portfolio</span>
+                    }
+                </div>
+                <h3 id="student-@student.StudentId">@student.FullName</h3>
+                <p class="student-introduction">@student.Introduction</p>
+
+                <div class="card-footer">
+                    @if (student.IsOwnPortfolio)
+                    {
+                        <a class="edit-profile-link student-button is-text" asp-controller="Student" asp-action="Edit">Edit profile</a>
+                    }
+                    else
+                    {
+                        <span class="meta-desc">Student</span>
+                    }
+                    <a class="view-button student-button is-primary" asp-controller="Student" asp-action="Portfolio" asp-route-id="@student.StudentId" aria-label="View @student.FullName's portfolio">
+                        <span>View</span>
+                        <span class="arrow-icon" aria-hidden="true">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </article>
+        }
+        </div>
+    </section>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/student/dashboard.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Student/StudDashboard.css" asp-append-version="true" />
+}

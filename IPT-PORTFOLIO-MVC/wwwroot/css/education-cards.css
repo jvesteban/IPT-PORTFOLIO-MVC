@@ -1,0 +1,31 @@
+/* Shared education cards used by student and admin portfolios. */
+.education-stages {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+.education-stage {
+    padding: 20px;
+    min-width: 0;
+    border: 1px solid #dfe7f1;
+    border-top: 3px solid #9dbbf0;
+    border-radius: 12px;
+    background: #fbfcff;
+    overflow-wrap: anywhere;
+    transition: transform .24s cubic-bezier(.22, 1, .36, 1), border-color .2s ease, box-shadow .24s ease;
+}
+.education-stage:hover { border-color: #a6c1ee; box-shadow: 0 7px 18px #183b6c08; }
+.education-stage h3 { margin: 0; color: #214d8a; font-size: 14px; }
+.education-stage p { margin: 8px 0 16px; color: #66738a; font-size: 12px; line-height: 1.7; }
+ .education-grade { margin-top: 16px; padding-top: 12px; border-top: 1px solid #e1e9f4; }
+.education-grade h4 { margin: 0 0 8px; font-size: 12px; font-weight: 600; color: #526781; }
+.education-stage .education-school { padding: 0 0 0 10px; margin: 10px 0; border-left: 2px solid #c4d7f7; }
+.education-stage .education-school p { margin: 0 0 3px; color: #284567; font-size: 13px; font-weight: 600; }
+.education-school span { color: #66738a; font-size: 12px; font-variant-numeric: tabular-nums; }
+.education-stage .education-unfilled { margin: 0; color: #7a879a; font-size: 12px; }
+@media (max-width: 1100px) { .education-stages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .education-stages { grid-template-columns: minmax(0, 1fr); } }
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+    .education-stage:hover { transform: translateY(-3px); }
+}

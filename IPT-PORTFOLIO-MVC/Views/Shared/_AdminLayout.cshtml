@@ -1,0 +1,67 @@
+@{
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var isOverview = string.Equals(action, "Dashboard", StringComparison.OrdinalIgnoreCase) || string.Equals(action, "Index", StringComparison.OrdinalIgnoreCase);
+    var isStudents = string.Equals(action, "Students", StringComparison.OrdinalIgnoreCase) || string.Equals(action, "Student", StringComparison.OrdinalIgnoreCase);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] · IPT Admin</title>
+    <link rel="stylesheet" href="~/css/workspace.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/admin-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="admin-area">
+    <a class="skip-link" href="#admin-content">Skip to content</a>
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand-row">
+                <div class="sidebar-brand">
+                    <a asp-controller="Admin" asp-action="Dashboard" class="brand-link">IPT PORTFOLIO</a>
+                    <span class="brand-caption">ADMIN WORKSPACE</span>
+                </div>
+                <button class="admin-menu-toggle admin-button is-secondary" type="button" aria-expanded="false" aria-controls="admin-navigation" hidden>
+                    Menu <span aria-hidden="true">☰</span>
+                </button>
+            </div>
+            <nav class="admin-nav" id="admin-navigation" aria-label="Admin navigation">
+                <a asp-controller="Admin" asp-action="Dashboard" class="nav-item @(isOverview ? "active" : "")" aria-current="@(isOverview ? "page" : null)">
+                    <span class="nav-indicator" aria-hidden="true"></span>
+                    <span class="nav-label">Overview</span>
+                </a>
+                <a asp-controller="Admin" asp-action="Students" class="nav-item @(isStudents ? "active" : "")" aria-current="@(isStudents ? "page" : null)">
+                    <span class="nav-indicator" aria-hidden="true"></span>
+                    <span class="nav-label">Students</span>
+                </a>
+            </nav>
+        </aside>
+        <div class="admin-workspace">
+            <header class="admin-topbar">
+                <div class="topbar-title-wrap">
+                    <span class="topbar-breadcrumb">Admin</span>
+                    <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                    <span class="topbar-title">@ViewData["Title"]</span>
+                </div>
+                <div class="admin-actions">
+                    <span class="admin-badge">Administrator</span>
+                    <form asp-controller="Account" asp-action="Logout" data-signout method="post" class="logout-form" data-admin-submit>
+                        <button type="submit" class="admin-button is-secondary" data-loading-text="Signing out…">Sign out</button>
+                    </form>
+                </div>
+            </header>
+            <main id="admin-content" class="admin-main" tabindex="-1">@RenderBody()</main>
+            <footer class="admin-footer">
+                <span>© @DateTime.Now.Year IPT Portfolio · Administrative Console</span>
+                <span>Philippine Standard Time (UTC+8)</span>
+            </footer>
+        </div>
+    </div>
+    <p class="sr-only" id="admin-submit-feedback" role="status" aria-live="polite"></p>
+    <script src="~/js/admin/workspace.js" asp-append-version="true"></script>
+    <partial name="_SignOutDialog" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

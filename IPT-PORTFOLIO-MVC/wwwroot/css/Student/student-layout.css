@@ -1,0 +1,154 @@
+/* Shared student workspace layout. Consistent with IPT Portfolio auth design. */
+:root {
+    --student-blue: #245bd5;
+    --student-blue-hover: #1949b3;
+    --student-blue-soft: #edf3ff;
+    --student-ink: #18243b;
+    --student-muted: #66738a;
+    --student-line: #e1e7f0;
+    --student-bg: #f5f7fb;
+    --student-card: #ffffff;
+    --student-shadow: 0 8px 30px rgba(28, 61, 107, 0.05);
+    --student-shadow-hover: 0 14px 36px rgba(28, 61, 107, 0.10);
+    --student-radius-lg: 16px;
+    --student-radius-md: 10px;
+    --student-radius-sm: 6px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--student-bg);
+    color: var(--student-ink);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--student-blue);
+    text-decoration: none;
+    transition: color .15s ease;
+}
+
+a:hover {
+    color: var(--student-blue-hover);
+}
+
+a:focus-visible, button:focus-visible {
+    outline: 3px solid #85abff;
+    outline-offset: 4px;
+}
+
+.student-shell {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main Area */
+.workspace-main {
+    flex: 1;
+    width: min(1040px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 40px 0 60px;
+    outline: none;
+}
+
+/* Footer */
+.workspace-footer {
+    border-top: 1px solid var(--student-line);
+    background: #ffffff;
+    margin-top: auto;
+}
+
+.footer-inner {
+    width: min(1040px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: var(--student-muted);
+    font-size: 13px;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--student-muted);
+    font-size: 13px;
+}
+
+.footer-links a:hover {
+    color: var(--student-blue);
+    text-decoration: underline;
+}
+
+.skip-link {
+    position: fixed;
+    top: -100px;
+    left: 16px;
+    z-index: 1000;
+    padding: 12px 20px;
+    background: white;
+    border: 1px solid var(--student-line);
+    border-radius: var(--student-radius-sm);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.skip-link:focus {
+    top: 16px;
+}
+
+/* Browser-managed transitions between student pages. */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+
+    ::view-transition-old(root) {
+        animation: student-page-out .16s ease-out both;
+    }
+
+    ::view-transition-new(root) {
+        animation: student-page-in .22s ease-out both;
+    }
+
+    @keyframes student-page-out {
+        to { opacity: 0; }
+    }
+
+    @keyframes student-page-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .workspace-main {
+        padding: 24px 0 48px;
+    }
+}
+
+@media (max-width: 480px) {
+    .workspace-main, .footer-inner {
+        width: calc(100% - 32px);
+    }
+    .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

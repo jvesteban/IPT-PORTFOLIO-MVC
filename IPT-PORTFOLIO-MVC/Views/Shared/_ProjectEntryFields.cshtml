@@ -1,0 +1,41 @@
+@model IPT_PORTFOLIO_MVC.ViewModels.Student.StudentProjectEditViewModel
+
+<div class="project-editor-card" data-project-record role="group" aria-labelledby="@(Html.IdFor(m => m.Title))-heading">
+    <input asp-for="ProjectId" type="hidden" data-project-meta="ProjectId" />
+    <input type="hidden" name="@(Html.NameFor(m => m.RemoveImage))" value="@(Model.RemoveImage ? "true" : "false")" data-project-meta="RemoveImage" />
+    <div class="project-record-heading">
+        <h3 id="@(Html.IdFor(m => m.Title))-heading" data-project-heading>@(string.IsNullOrWhiteSpace(Model.Title) ? "New project" : Model.Title)</h3>
+        <button type="button" class="student-button is-danger" data-remove-project hidden>Remove</button>
+    </div>
+    <div class="project-image-editor" data-project-image data-saved-src="@Model.CurrentImageUrl">
+        <div class="project-image-preview">
+            <img src="@Model.CurrentImageUrl" alt="Project image preview" data-image-preview hidden="@(Model.CurrentImageUrl is null || Model.RemoveImage)" />
+            <span data-image-placeholder hidden="@(Model.CurrentImageUrl is not null && !Model.RemoveImage)">No image selected</span>
+        </div>
+        <div class="field student-field">
+            <label asp-for="Image">Image or screenshot <span class="field-requirement">Optional</span></label>
+            <input asp-for="Image" type="file" accept="image/jpeg,image/png,image/webp" data-project-field="Image" aria-describedby="@(Html.IdFor(m => m.Image))-validation project-image-help" />
+            <span asp-validation-for="Image" data-project-error-for="Image" id="@(Html.IdFor(m => m.Image))-validation"></span>
+            <div class="project-image-actions">
+                <button type="button" class="student-button is-secondary" data-remove-image hidden>Remove image</button>
+                <button type="button" class="student-button is-text" data-restore-image hidden>Undo removal</button>
+            </div>
+            <p class="project-image-feedback" data-image-feedback role="status" aria-live="polite"></p>
+        </div>
+    </div>
+    <div class="field student-field">
+        <label asp-for="Title">Project title <span class="field-requirement">Required for a project</span></label>
+        <input asp-for="Title" data-project-field="Title" placeholder="Enter the project name" aria-describedby="@(Html.IdFor(m => m.Title))-validation" />
+        <span asp-validation-for="Title" data-project-error-for="Title" id="@(Html.IdFor(m => m.Title))-validation"></span>
+    </div>
+    <div class="field student-field">
+        <label asp-for="Description">Description <span class="field-requirement">Optional</span></label>
+        <textarea asp-for="Description" data-project-field="Description" rows="3" placeholder="Describe what you made and your contribution." aria-describedby="project-description-help @(Html.IdFor(m => m.Description))-validation"></textarea>
+        <span asp-validation-for="Description" data-project-error-for="Description" id="@(Html.IdFor(m => m.Description))-validation"></span>
+    </div>
+    <div class="field student-field">
+        <label asp-for="ProjectUrl">Project link <span class="field-requirement">Optional</span></label>
+        <input asp-for="ProjectUrl" data-project-field="ProjectUrl" type="url" placeholder="https://" aria-describedby="project-link-help @(Html.IdFor(m => m.ProjectUrl))-validation" />
+        <span asp-validation-for="ProjectUrl" data-project-error-for="ProjectUrl" id="@(Html.IdFor(m => m.ProjectUrl))-validation"></span>
+    </div>
+</div>

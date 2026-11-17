@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Design System & Layout Preview · IPT Portfolio</title>
+    <style>
+        :root {
+            --blue: #245bd5;
+            --blue-hover: #1949b3;
+            --blue-soft: #edf3ff;
+            --navy: #204b9c;
+            --ink: #18243b;
+            --muted: #66738a;
+            --line: #e1e7f0;
+            --bg: #f5f7fb;
+            --white: #ffffff;
+            --active-green: #12793d;
+            --active-bg: #edf8f1;
+            --inactive-muted: #5f6e82;
+            --inactive-bg: #f1f4f8;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --shadow-card: 0 4px 20px rgba(28, 61, 107, 0.05);
+            --shadow-hover: 0 12px 32px rgba(28, 61, 107, 0.10);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0f172a;
+            color: var(--ink);
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Top Switcher Bar */
+        .preview-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .toolbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toolbar-badge {
+            background: #3b82f6;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .toolbar-title {
+            color: #f8fafc;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .view-switcher {
+            display: flex;
+            background: #0f172a;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 0;
+            color: #94a3b8;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all .15s ease;
+        }
+
+        .tab-btn:hover { color: #f8fafc; }
+        .tab-btn.active {
+            background: var(--blue);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(36, 91, 213, 0.4);
+        }
+
+        .viewport-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .vp-btn {
+            background: #334155;
+            border: 0;
+            color: #e2e8f0;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .vp-btn:hover { background: #475569; }
+
+        /* Canvas Wrapper */
+        .preview-canvas-wrap {
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            transition: all .2s ease;
+        }
+
+        .preview-frame {
+            width: 100%;
+            max-width: 1280px;
+            background: var(--bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+            min-height: 800px;
+        }
+
+        /* View Panels */
+        .preview-view { display: none; }
+        .preview-view.active { display: block; }
+
+        /* -------------------------------------------------------------------------
+           1. ADMIN LAYOUT & DASHBOARD
+           ------------------------------------------------------------------------- */
+        .admin-shell {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 800px;
+        }
+
+        .admin-sidebar {
+            background: var(--white);
+            border-right: 1px solid var(--line);
+            padding: 28px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand { margin-bottom: 36px; }
+        .sidebar-brand h2 { color: var(--navy); font-size: 19px; font-weight: 750; letter-spacing: -.6px; }
+        .sidebar-brand span { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+
+        .admin-nav-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+        .admin-nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all .15s ease;
+        }
+
+        .admin-nav-item.active a, .admin-nav-item a:hover {
+            color: var(--blue);
+            background: var(--blue-soft);
+        }
+
+        .sidebar-footer-note {
+            margin-top: auto;
+            padding: 14px;
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .admin-workspace {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+        }
+
+        .admin-topbar {
+            height: 68px;
+            background: var(--white);
+            border-bottom: 1px solid var(--line);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .topbar-title { font-size: 14px; font-weight: 600; color: var(--muted); }
+        .topbar-actions { display: flex; align-items: center; gap: 16px; }
+        .admin-mode-pill {
+            background: #eff6ff;
+            color: var(--blue);
+            border: 1px solid #bfdbfe;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .signout-btn {
+            background: transparent;
+            border: 0;
+            color: #ef4444;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .admin-content-inner {
+            padding: 36px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .page-header h1 { font-size: 28px; font-weight: 750; color: var(--ink); margin-bottom: 6px; letter-spacing: -.6px; }
+        .page-header p { font-size: 14px; color: var(--muted); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .stat-card .label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+        .stat-card .val { font-size: 32px; font-weight: 750; color: var(--ink); margin: 8px 0 4px; }
+        .stat-card .sub { font-size: 12px; color: #10b981; font-weight: 600; }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 20px;
+        }
+
+        .panel-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .panel-header h3 { font-size: 16px; font-weight: 700; color: var(--ink); }
+        .panel-header span { font-size: 12px; color: var(--muted); }
+
+        /* Donut representation */
+        .donut-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+            gap: 32px;
+        }
+
+        .mock-donut {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: conic-gradient(var(--blue) 0% 75%, #cbd5e1 75% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .mock-donut-inner {
+            width: 96px;
+            height: 96px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mock-donut-inner strong { font-size: 24px; color: var(--ink); }
+        .mock-donut-inner span { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+
+        .chart-legend-clean {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            font-size: 13px;
+        }
+
+        .legend-tag { display: flex; align-items: center; gap: 8px; }
+        .dot-ind { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-ind.active { background: var(--blue); }
+        .dot-ind.inactive { background: #94a3b8; }
+
+        /* Bar Chart */
+        .bars-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 160px;
+            padding: 20px 10px 0;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .bar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 44px;
+        }
+
+        .bar-fill-el {
+            width: 100%;
+            background: linear-gradient(180deg, var(--blue), #4f80ea);
+            border-radius: 6px 6px 0 0;
+            transition: height .3s ease;
+            position: relative;
+        }
+
+        .bar-col span { font-size: 11px; font-weight: 600; color: var(--muted); }
+
+        /* -------------------------------------------------------------------------
+           2. ADMIN STUDENTS TABLE
+           ------------------------------------------------------------------------- */
+        .table-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 240px;
+            height: 42px;
+            padding: 0 14px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+            font-size: 14px;
+        }
+
+        .select-filter {
+            height: 42px;
+            padding: 0 14px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+            font-size: 14px;
+            color: var(--ink);
+        }
+
+        .btn-primary {
+            height: 42px;
+            padding: 0 20px;
+            background: var(--blue);
+            color: var(--white);
+            border: 0;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--line);
+        }
+
+        .styled-table th {
+            background: #f8fafc;
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .styled-table td {
+            padding: 16px 18px;
+            font-size: 14px;
+            color: var(--ink);
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .styled-table tr:hover { background: #f8fbff; }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pill.active { background: var(--active-bg); color: var(--active-green); }
+        .status-pill.inactive { background: var(--inactive-bg); color: var(--inactive-muted); }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action-view {
+            padding: 5px 12px;
+            background: #eff6ff;
+            color: var(--blue);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid #bfdbfe;
+        }
+
+        .btn-action-deact {
+            padding: 5px 12px;
+            background: #fff1f2;
+            color: #e11d48;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #fecdd3;
+            cursor: pointer;
+        }
+
+        /* -------------------------------------------------------------------------
+           3. STUDENT WORKSPACE (DASHBOARD & PORTFOLIO)
+           ------------------------------------------------------------------------- */
+        .student-preview-shell {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 36px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .student-header {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 32px 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-card);
+            background: linear-gradient(135deg, #ffffff 40%, #eef4ff 100%);
+        }
+
+        .student-card-preview {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .preview-cover {
+            background: linear-gradient(145deg, #1c439b, #245bd5);
+            color: #fff;
+            padding: 32px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .preview-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            display: grid;
+            place-items: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .preview-body { padding: 32px; display: flex; flex-direction: column; }
+        .tag-list-clean { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; list-style: none; }
+        .tag-list-clean li {
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .timeline-clean {
+            border-left: 2px solid #e2e8f0;
+            padding-left: 18px;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .timeline-clean li { position: relative; }
+        .timeline-clean li::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--blue);
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--blue);
+        }
+
+        .timeline-clean h4 { font-size: 14px; color: var(--ink); }
+        .timeline-clean p { font-size: 13px; color: var(--muted); }
+    </style>
+</head>
+<body>
+
+    <!-- Top Preview Controller -->
+    <header class="preview-toolbar">
+        <div class="toolbar-brand">
+            <span class="toolbar-badge">Interactive Preview</span>
+            <span class="toolbar-title">IPT Portfolio Design System</span>
+        </div>
+
+        <nav class="view-switcher">
+            <button class="tab-btn active" onclick="switchView('admin-overview', this)">Admin Overview</button>
+            <button class="tab-btn" onclick="switchView('admin-students', this)">Admin Students List</button>
+            <button class="tab-btn" onclick="switchView('student-dashboard', this)">Student Dashboard</button>
+            <button class="tab-btn" onclick="switchView('student-portfolio', this)">Student Portfolio</button>
+        </nav>
+
+        <div class="viewport-controls">
+            <button class="vp-btn" onclick="setDeviceWidth('100%')">Desktop</button>
+            <button class="vp-btn" onclick="setDeviceWidth('768px')">Tablet</button>
+            <button class="vp-btn" onclick="setDeviceWidth('420px')">Mobile</button>
+        </div>
+    </header>
+
+    <!-- Canvas Frame Container -->
+    <main class="preview-canvas-wrap">
+        <div id="previewFrame" class="preview-frame">
+
+            <!-- 1. ADMIN OVERVIEW -->
+            <section id="admin-overview" class="preview-view active">
+                <div class="admin-shell">
+                    <aside class="admin-sidebar">
+                        <div class="sidebar-brand">
+                            <h2>IPT PORTFOLIO</h2>
+                            <span>ADMIN WORKSPACE</span>
+                        </div>
+                        <ul class="admin-nav-list">
+                            <li class="admin-nav-item active"><a href="#">Overview</a></li>
+                            <li class="admin-nav-item"><a href="#">Students</a></li>
+                        </ul>
+                        <div class="sidebar-footer-note">
+                            <strong>System Preview</strong>
+                            <p>Synchronized with local storage and test accounts.</p>
+                        </div>
+                    </aside>
+                    <div class="admin-workspace">
+                        <div class="admin-topbar">
+                            <span class="topbar-title">Admin Dashboard</span>
+                            <div class="topbar-actions">
+                                <span class="admin-mode-pill">Administrator Mode</span>
+                                <button class="signout-btn">Sign out</button>
+                            </div>
+                        </div>
+                        <div class="admin-content-inner">
+                            <div class="page-header">
+                                <h1>Admin Overview</h1>
+                                <p>A consolidated view of all registered students, activity, and registration trends.</p>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <span class="label">Total Students</span>
+                                    <div class="val">24</div>
+                                    <span class="sub">+4 this month</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="label">Active Accounts</span>
+                                    <div class="val">21</div>
+                                    <span class="sub" style="color: #10b981;">87.5% retention</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="label">Pending / Inactive</span>
+                                    <div class="val">3</div>
+                                    <span class="sub" style="color: #64748b;">Requires review</span>
+                                </div>
+                            </div>
+
+                            <div class="charts-row">
+                                <div class="panel-card">
+                                    <div class="panel-header">
+                                        <h3>Account Status Ratio</h3>
+                                        <span>Current Semester</span>
+                                    </div>
+                                    <div class="donut-wrap">
+                                        <div class="mock-donut">
+                                            <div class="mock-donut-inner">
+                                                <strong>24</strong>
+                                                <span>Total</span>
+                                            </div>
+                                        </div>
+                                        <div class="chart-legend-clean">
+                                            <div class="legend-row">
+                                                <span class="legend-tag"><span class="dot-ind active"></span> Active</span>
+                                                <strong>21</strong>
+                                            </div>
+                                            <div class="legend-row">
+                                                <span class="legend-tag"><span class="dot-ind inactive"></span> Inactive</span>
+                                                <strong>3</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel-card">
+                                    <div class="panel-header">
+                                        <h3>Registrations Trend</h3>
+                                        <span>Last 6 Months</span>
+                                    </div>
+                                    <div class="bars-container">
+                                        <div class="bar-col"><div class="bar-fill-el" style="height: 35%;"></div><span>Jun</span></div>
+                                        <div class="bar-col"><div class="bar-fill-el" style="height: 50%;"></div><span>Jul</span></div>
+                                        <div class="bar-col"><div class="bar-fill-el" style="height: 80%;"></div><span>Aug</span></div>
+                                        <div class="bar-col"><div class="bar-fill-el" style="height: 95%;"></div><span>Sep</span></div>
+                                        <div class="bar-col"><div class="bar-fill-el" style="height: 60%;"></div><span>Oct</span></div>
+                                        <div class="bar-col"><div class="bar-fill-el" style="height: 100%;"></div><span>Nov</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. ADMIN STUDENTS TABLE -->
+            <section id="admin-students" class="preview-view">
+                <div class="admin-shell">
+                    <aside class="admin-sidebar">
+                        <div class="sidebar-brand">
+                            <h2>IPT PORTFOLIO</h2>
+                            <span>ADMIN WORKSPACE</span>
+                        </div>
+                        <ul class="admin-nav-list">
+                            <li class="admin-nav-item"><a href="#">Overview</a></li>
+                            <li class="admin-nav-item active"><a href="#">Students</a></li>
+                        </ul>
+                    </aside>
+                    <div class="admin-workspace">
+                        <div class="admin-topbar">
+                            <span class="topbar-title">Student Records Management</span>
+                            <div class="topbar-actions">
+                                <span class="admin-mode-pill">Administrator Mode</span>
+                            </div>
+                        </div>
+                        <div class="admin-content-inner">
+                            <div class="page-header">
+                                <h1>Registered Students</h1>
+                                <p>Manage student access, view individual portfolios, and audit account status.</p>
+                            </div>
+
+                            <div class="table-filter-bar">
+                                <input type="text" class="search-box" placeholder="Search by name or email..." value="Alex Reyes" />
+                                <select class="select-filter">
+                                    <option>All Accounts</option>
+                                    <option selected>Active Only</option>
+                                    <option>Inactive Only</option>
+                                </select>
+                                <button class="btn-primary">Apply Filters</button>
+                            </div>
+
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Username</th>
+                                        <th>Status</th>
+                                        <th>Registered Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Alex Reyes</strong></td>
+                                        <td>stud1</td>
+                                        <td><span class="status-pill active">Active</span></td>
+                                        <td>Nov 11, 2026</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <a href="#" class="btn-action-view">View</a>
+                                                <button class="btn-action-deact">Deactivate</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Maria Clara Santos</strong></td>
+                                        <td>maria.c</td>
+                                        <td><span class="status-pill active">Active</span></td>
+                                        <td>Nov 10, 2026</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <a href="#" class="btn-action-view">View</a>
+                                                <button class="btn-action-deact">Deactivate</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Juan Dela Cruz</strong></td>
+                                        <td>jdelacruz</td>
+                                        <td><span class="status-pill inactive">Inactive</span></td>
+                                        <td>Nov 08, 2026</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <a href="#" class="btn-action-view">View</a>
+                                                <button class="btn-action-deact" style="background: #f0fdf4; color: #16a34a; border-color: #bbf7d0;">Activate</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. STUDENT DASHBOARD -->
+            <section id="student-dashboard" class="preview-view">
+                <div class="student-preview-shell">
+                    <div class="student-header">
+                        <div>
+                            <span style="font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 1px; text-transform: uppercase;">Student Workspace</span>
+                            <h1 style="font-size: 28px; margin: 4px 0 8px; color: var(--ink);">Welcome back, <span style="color: var(--blue);">Alex</span></h1>
+                            <p style="color: var(--muted); font-size: 14px;">Manage your education history, highlight your technical skills, and showcase your portfolio.</p>
+                        </div>
+                        <div style="background: #fff; padding: 12px 20px; border-radius: 12px; border: 1px solid var(--line); text-align: center;">
+                            <strong style="font-size: 20px; color: var(--navy);">1</strong>
+                            <div style="font-size: 11px; color: var(--muted); font-weight: 600;">Active Portfolio</div>
+                        </div>
+                    </div>
+
+                    <div class="student-card-preview">
+                        <div class="preview-cover">
+                            <div class="preview-avatar">AR</div>
+                            <h3 style="font-size: 16px;">Alex Reyes</h3>
+                            <span style="font-size: 11px; opacity: 0.85; margin-top: 4px;">Student Portfolio</span>
+                        </div>
+                        <div class="preview-body">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 1px;">SHOWCASE PROFILE</span>
+                                <span class="status-pill active">Ready to view</span>
+                            </div>
+                            <h2 style="font-size: 22px; color: var(--ink); margin-bottom: 8px;">Alex Santos Reyes</h2>
+                            <p style="color: var(--muted); font-size: 14px; line-height: 1.6;">A student who enjoys learning, building useful projects, and finding new ways to solve everyday problems.</p>
+
+                            <ul class="tag-list-clean">
+                                <li>Education</li>
+                                <li>Skills</li>
+                                <li>Hobbies</li>
+                                <li>Career Goal</li>
+                            </ul>
+
+                            <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 18px;">
+                                <span style="font-size: 12px; color: var(--muted);">Last updated today</span>
+                                <button class="btn-primary" style="padding: 0 24px;">View Portfolio &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. STUDENT PORTFOLIO -->
+            <section id="student-portfolio" class="preview-view">
+                <div class="student-preview-shell">
+                    <div style="background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-card);">
+                        <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--line);">
+                            <div class="preview-avatar" style="background: linear-gradient(135deg, var(--navy), var(--blue)); color: #fff; width: 72px; height: 72px; font-size: 24px; margin: 0;">AR</div>
+                            <div>
+                                <h1 style="font-size: 26px; color: var(--ink); margin-bottom: 4px;">Alex Santos Reyes</h1>
+                                <p style="font-size: 13px; color: var(--muted);">alex@example.com · Born August 18, 2005</p>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                            <div class="panel-card" style="box-shadow: none;">
+                                <div class="panel-header"><h3>Education History</h3></div>
+                                <ul class="timeline-clean">
+                                    <li><h4>College (2023–Present)</h4><p>Sample University</p></li>
+                                    <li><h4>Senior High (2021–2023)</h4><p>Sample Senior High School</p></li>
+                                    <li><h4>Junior High (2017–2021)</h4><p>Sample National High School</p></li>
+                                    <li><h4>Elementary (2011–2017)</h4><p>Sample Elementary School</p></li>
+                                </ul>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 20px;">
+                                <div class="panel-card" style="box-shadow: none;">
+                                    <div class="panel-header"><h3>Skills & Competencies</h3></div>
+                                    <ul class="tag-list-clean" style="margin: 0;">
+                                        <li>C#</li>
+                                        <li>HTML & CSS</li>
+                                        <li>Problem solving</li>
+                                        <li>Teamwork</li>
+                                    </ul>
+                                </div>
+
+                                <div class="panel-card" style="box-shadow: none; border-left: 4px solid var(--blue); background: #fbfdff;">
+                                    <div class="panel-header"><h3>Career Goal</h3></div>
+                                    <p style="font-size: 14px; font-style: italic; color: #1e3a8a; line-height: 1.6;">
+                                        “To become a software developer and create applications that make a positive difference in people's lives.”
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        function switchView(viewId, btn) {
+            document.querySelectorAll('.preview-view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function setDeviceWidth(width) {
+            document.getElementById('previewFrame').style.maxWidth = width;
+        }
+    </script>
+</body>
+</html>

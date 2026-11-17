@@ -1,0 +1,66 @@
+@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var isDashboard = currentAction.Equals("Dashboard", StringComparison.OrdinalIgnoreCase)
+        || currentAction.Equals("Index", StringComparison.OrdinalIgnoreCase);
+    var navigationBrand = ViewData["NavigationBrand"] as string ?? "IPT PORTFOLIO";
+    var brandHref = ViewData["NavigationBrandHref"] as string ?? Url.Action("Dashboard", "Student");
+    var navigationLabel = ViewData["NavigationLabel"] as string ?? "Student navigation";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] · IPT PORTFOLIO</title>
+    <link rel="stylesheet" href="~/css/Student/student-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/workspace.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Student/components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Student/navigation.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="@ViewData["BodyClass"]">
+    <a class="skip-link" href="#student-content">Skip to content</a>
+    <div class="student-shell">
+        <header class="workspace-header">
+            <div class="student-navbar">
+                <a class="student-navbar-brand" href="@brandHref" title="@navigationBrand">@navigationBrand</a>
+                <button class="student-navbar-toggle student-button is-secondary" type="button" aria-controls="student-navigation" aria-expanded="false" hidden>
+                    Menu <span aria-hidden="true">☰</span>
+                </button>
+                <div class="student-navbar-panel" id="student-navigation">
+                    <nav class="student-navbar-links" aria-label="@navigationLabel">
+                        @if (IsSectionDefined("WorkspaceNavigation"))
+                        {
+                            @await RenderSectionAsync("WorkspaceNavigation")
+                        }
+                        else
+                        {
+                            <a asp-controller="Student" asp-action="Dashboard" class="@(isDashboard ? "is-active" : "")" aria-current="@(isDashboard ? "page" : null)">Dashboard</a>
+                            <a asp-controller="Student" asp-action="Portfolio" asp-route-id="" class="@(!isDashboard ? "is-active" : "")" aria-current="@(!isDashboard ? "page" : null)">My portfolio</a>
+                        }
+                    </nav>
+                    <div class="student-navbar-actions">
+                        @await RenderSectionAsync("WorkspaceActions", required: false)
+                        <form asp-controller="Account" asp-action="Logout" data-signout method="post">
+                            <button class="student-navbar-button student-button is-secondary" type="submit">Sign out</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="workspace-main" id="student-content" tabindex="-1">@RenderBody()</main>
+        <footer class="workspace-footer">
+            <div class="footer-inner">
+                <span>© @DateTime.Now.Year Student Portfolio · IPT Project</span>
+                <div class="footer-links">
+                    <a asp-controller="Student" asp-action="Dashboard">Dashboard</a>
+                    <a asp-controller="Student" asp-action="Portfolio" asp-route-id="">My portfolio</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="~/js/student/navigation.js" asp-append-version="true"></script>
+    <partial name="_SignOutDialog" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,265 @@
+@model IPT_PORTFOLIO_MVC.ViewModels.Student.StudentPortfolioViewModel
+@{
+    Layout = "_StudentLayout";
+    ViewData["Title"] = Model.IsOwnPortfolio ? "My portfolio" : "Student portfolio";
+    ViewData["BodyClass"] = "portfolio-page";
+    var title = string.IsNullOrWhiteSpace(Model.BusinessName) ? Model.FullName : Model.BusinessName;
+    var intro = Model.Introduction?.Trim() ?? string.Empty;
+    ViewData["NavigationBrand"] = title;
+    ViewData["NavigationBrandHref"] = "#student-content";
+    ViewData["NavigationLabel"] = "Portfolio sections";
+}
+@section WorkspaceNavigation {
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#services">Services</a>
+    <a href="#owners">Owners</a>
+    <a href="#education">Education</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+}
+@section WorkspaceActions {
+    <a class="student-navbar-action-link" asp-controller="Student" asp-action="Dashboard">Dashboard</a>
+    @if (Model.IsOwnPortfolio)
+    {
+        <a class="student-navbar-button student-button is-primary" asp-controller="Student" asp-action="Edit">Edit portfolio</a>
+    }
+}
+<div class="student-portfolio">
+    @if (TempData["ProfileSaved"] is string savedMessage)
+    {
+        <p class="profile-save-notice" role="status">@savedMessage</p>
+    }
+
+    <header class="portfolio-hero">
+        <div class="hero-inner">
+            <div class="hero-copy">
+                <p class="hero-eyebrow">STUDENT PORTFOLIO</p>
+                <h1>@title</h1>
+                @if (intro.Length > 0)
+                {
+                    @if (intro.Length <= 320)
+                    {
+                        <p class="hero-intro">@intro</p>
+                    }
+                    else
+                    {
+                        var cut = intro.LastIndexOf(' ', 300);
+                        if (cut < 1) { cut = 300; }
+                        <p class="hero-intro">@intro.Substring(0, cut)…</p>
+                    }
+                }
+                <div class="hero-actions">
+                    <a class="portfolio-button student-button is-primary" href="#about">About me <span aria-hidden="true">↓</span></a>
+                    <a class="portfolio-button student-button is-secondary" href="#contact">Contact <span aria-hidden="true">↓</span></a>
+                </div>
+            </div>
+            <div class="hero-profile">
+                <div class="profile-avatar-large" aria-hidden="true">
+                    <partial name="_ProfileAvatar" model='new IPT_PORTFOLIO_MVC.ViewModels.Shared.ProfileAvatarViewModel(Model.StudentId, Model.Initials)' />
+                </div>
+                <div class="hero-profile-caption">
+                    <span>Student profile</span>
+                    <p>@Model.FullName</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="portfolio-section about-section" aria-labelledby="about-heading">
+        <div class="section-heading">
+            <h2 id="about-heading">About the student</h2>
+        </div>
+        @if (intro.Length > 320)
+        {
+            <div class="introduction-copy"><h3>Personal introduction</h3><p class="body-copy">@intro</p></div>
+        }
+        <div class="about-grid">
+            <div class="portfolio-card student-ui-card personal-card">
+                <h3>Personal information</h3>
+                <dl class="personal-information">
+                    <div><dt>First name</dt><dd>@Model.FirstName</dd></div>
+                    <div><dt>Middle name</dt><dd>@(string.IsNullOrWhiteSpace(Model.MiddleName) ? "Not added yet" : Model.MiddleName)</dd></div>
+                    <div><dt>Last name</dt><dd>@Model.LastName</dd></div>
+                    <div><dt>Birthday</dt><dd>@(Model.BirthDate?.ToString("MMMM d, yyyy", System.Globalization.CultureInfo.InvariantCulture) ?? "Not added yet")</dd></div>
+                </dl>
+            </div>
+            <div class="portfolio-card student-ui-card career-card">
+                <h3>Career goal</h3>
+                <p class="career-text">@(string.IsNullOrWhiteSpace(Model.CareerGoal) ? "Not added yet" : Model.CareerGoal)</p>
+            </div>
+            <div class="portfolio-card student-ui-card business-card">
+                <div>
+                    <p class="card-label">ABOUT THE BUSINESS</p>
+                    <h3>@(string.IsNullOrWhiteSpace(Model.BusinessName) ? "Our story" : Model.BusinessName)</h3>
+                </div>
+                <p class="body-copy">@(string.IsNullOrWhiteSpace(Model.BusinessAbout) ? "Business information has not been added yet." : Model.BusinessAbout)</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="portfolio-section skills-section" aria-labelledby="skills-heading">
+        <div class="section-heading">
+            <h2 id="skills-heading">Skills and passions</h2>
+        </div>
+        <div class="skills-grid">
+            <div class="portfolio-card student-ui-card skill-card">
+                <h3>Skills</h3>
+                @if (Model.Skills.Count > 0)
+                {
+                    <ul class="tag-list">@foreach (var skill in Model.Skills) { <li class="@(skill.Length > 65 ? "paragraph-item" : null)">@skill</li> }</ul>
+                }
+                else { <p class="empty-state">No skills listed yet.</p> }
+            </div>
+            <div class="portfolio-card student-ui-card skill-card">
+                <h3>Passions &amp; hobbies</h3>
+                @if (Model.Hobbies.Count > 0)
+                {
+                    <ul class="tag-list">@foreach (var hobby in Model.Hobbies) { <li class="@(hobby.Length > 65 ? "paragraph-item" : null)">@hobby</li> }</ul>
+                }
+                else { <p class="empty-state">No hobbies listed yet.</p> }
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="portfolio-section services-section" aria-labelledby="services-heading">
+        <div class="section-heading">
+            <h2 id="services-heading">Products &amp; services</h2>
+        </div>
+        @if (Model.Offerings.Count > 0)
+        {
+            <ul class="offering-grid">
+                @foreach (var item in Model.Offerings)
+                {
+                    var separator = item.IndexOf(':');
+                    <li class="portfolio-card student-ui-card offering-card">
+                        @if (separator > 0 && separator <= 100 && separator + 1 < item.Length && char.IsWhiteSpace(item[separator + 1]))
+                        {
+                            <h3>@item.Substring(0, separator)</h3>
+                            <p>@item.Substring(separator + 1).Trim()</p>
+                        }
+                        else { <p>@item</p> }
+                    </li>
+                }
+            </ul>
+        }
+        else { <p class="portfolio-empty-state">No products or services added yet.</p> }
+    </section>
+
+    <section id="owners" class="portfolio-section owners-section" aria-labelledby="owners-heading">
+        <div class="section-heading">
+            <h2 id="owners-heading">Owners</h2>
+        </div>
+        @if (Model.Owners.Count > 0)
+        {
+            <ul class="owners-list">
+                @foreach (var owner in Model.Owners)
+                {
+                    <li class="portfolio-card student-ui-card owner-card">
+                        <span class="owner-mark" aria-hidden="true">@owner.Substring(0, 1).ToUpperInvariant()</span>
+                        <span>@owner</span>
+                    </li>
+                }
+            </ul>
+        }
+        else { <p class="portfolio-empty-state">No owner information added yet.</p> }
+    </section>
+
+    <section id="education" class="portfolio-section education-section" aria-labelledby="education-heading">
+        <div class="section-heading">
+            <h2 id="education-heading">Education history</h2>
+        </div>
+        @if (Model.Education.Any(level => level.Entries.Count > 0))
+        {
+            <div class="academic-history">
+                @foreach (var history in Model.Education.Where(level => level.Entries.Count > 0))
+                {
+                    <details class="academic-stage" open="@(history == Model.Education.First(level => level.Entries.Count > 0))">
+                        <summary>@history.Level <span>@history.Entries.Min(entry => entry.StartYear)–@history.Entries.Max(entry => entry.EndYear)</span></summary>
+                        <dl>
+                            @foreach (var entry in history.Entries)
+                            {
+                                <div><dt>@entry.Grade</dt><dd><strong>@entry.SchoolName</strong>
+                                    @if (!string.IsNullOrWhiteSpace(entry.StrandTrack ?? entry.CollegeCourse)) { <span>@(entry.StrandTrack ?? entry.CollegeCourse)</span> }
+                                    <small>@entry.StartYear–@entry.EndYear</small></dd></div>
+                            }
+                        </dl>
+                    </details>
+                }
+            </div>
+        }
+        else { <p class="portfolio-empty-state">No education history added yet.</p> }
+    </section>
+
+    <section id="projects" class="portfolio-section projects-section" aria-labelledby="projects-heading">
+        <div class="section-heading projects-heading">
+            <div>
+                <h2 id="projects-heading">Student projects</h2>
+            </div>
+            @if (Model.IsOwnPortfolio && Model.Projects.Count > 0)
+            {
+                <a class="project-link" asp-controller="Student" asp-action="Edit" asp-fragment="projects-heading">Manage projects <span aria-hidden="true">→</span></a>
+            }
+        </div>
+        @if (Model.Projects.Count > 0)
+        {
+            <ul class="project-grid">
+                @foreach (var project in Model.Projects)
+                {
+                    <li class="portfolio-card student-ui-card project-card">
+                        @if (!string.IsNullOrWhiteSpace(project.ImageUrl))
+                        {
+                            <div class="project-media"><img class="project-cover" src="@project.ImageUrl" alt="Screenshot of @project.Title" loading="lazy" decoding="async" /></div>
+                        }
+                        <div class="project-details">
+                            <h3>@project.Title</h3>
+                            @if (!string.IsNullOrWhiteSpace(project.Description))
+                            {
+                                <p class="body-copy">@project.Description</p>
+                            }
+                            @if (Uri.TryCreate(project.ProjectUrl, UriKind.Absolute, out var projectUri)
+                                && (projectUri.Scheme == Uri.UriSchemeHttps || projectUri.Scheme == Uri.UriSchemeHttp))
+                            {
+                                <a class="project-link" href="@projectUri.AbsoluteUri" target="_blank" rel="noopener noreferrer">View project <span aria-hidden="true">↗</span><span class="portfolio-sr-only"> (opens in a new tab)</span></a>
+                            }
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="portfolio-empty-state projects-empty">
+                <h3>No projects added yet</h3>
+
+                @if (Model.IsOwnPortfolio)
+                {
+                    <a class="project-link" asp-controller="Student" asp-action="Edit" asp-fragment="projects-heading">Add your first project <span aria-hidden="true">→</span></a>
+                }
+            </div>
+        }
+    </section>
+
+    <section id="contact" class="contact-section" aria-labelledby="contact-heading">
+        <div class="contact-inner">
+            <div class="contact-heading">
+                <h2 id="contact-heading">Contact information</h2>
+                <p>Connect with @Model.FullName.</p>
+            </div>
+            <dl class="contact-list">
+                <div>
+                    <dt>Email</dt>
+                    <dd>@if (string.IsNullOrWhiteSpace(Model.Email)) { <span>Not added yet</span> } else { <a href="mailto:@Model.Email">@Model.Email <span aria-hidden="true">↗</span></a> }</dd>
+                </div>
+                <div><dt>Contact number</dt><dd>@(string.IsNullOrWhiteSpace(Model.ContactPhone) ? "Not added yet" : Model.ContactPhone)</dd></div>
+                <div><dt>Location</dt><dd>@(string.IsNullOrWhiteSpace(Model.ContactAddress) ? "Not added yet" : Model.ContactAddress)</dd></div>
+            </dl>
+        </div>
+    </section>
+</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/Student/Portfolio.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="~/js/student/portfolio.js" asp-append-version="true"></script>
+}

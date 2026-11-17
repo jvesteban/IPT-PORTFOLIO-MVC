@@ -1,0 +1,205 @@
+@using System.Globalization
+@model IPT_PORTFOLIO_MVC.ViewModels.Admin.AdminStudentDetailsViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Student information";
+}
+<div class="admin-student-detail">
+
+    <div class="detail-nav-bar">
+        <a class="admin-button is-secondary" asp-action="Students">
+            <span class="back-arrow" aria-hidden="true">&larr;</span>
+            <span>Back to students</span>
+        </a>
+    </div>
+
+    <header class="detail-header-card admin-card">
+        <div class="detail-avatar" aria-hidden="true">
+            <partial name="_ProfileAvatar" model='new IPT_PORTFOLIO_MVC.ViewModels.Shared.ProfileAvatarViewModel(Model.Student.StudentId, Model.Profile.Initials)' />
+        </div>
+        <div class="detail-header-content">
+            <div class="badge-row">
+                <p class="eyebrow">STUDENT RECORD</p>
+                <span class="account-status @(Model.Student.IsActive ? "active" : "inactive")">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    @(Model.Student.IsActive ? "Active Account" : "Inactive Account")
+                </span>
+            </div>
+            <h1>@Model.Profile.FullName</h1>
+            <p class="detail-username">@@@Model.Student.Username</p>
+        </div>
+    </header>
+
+    <div class="detail-grid">
+
+        <section class="detail-panel admin-card" aria-labelledby="detail-section-1">
+            <div class="panel-header">
+                <h2 id="detail-section-1">Account information</h2>
+            </div>
+            <dl class="detail-dl">
+                <div class="detail-row"><dt>First name</dt><dd>@Model.Profile.FirstName</dd></div>
+                <div class="detail-row"><dt>Middle name</dt><dd>@(string.IsNullOrWhiteSpace(Model.Profile.MiddleName) ? "Not added yet" : Model.Profile.MiddleName)</dd></div>
+                <div class="detail-row"><dt>Last name</dt><dd>@Model.Profile.LastName</dd></div>
+                <div class="detail-row">
+                    <dt>Username</dt>
+                    <dd>@@@Model.Student.Username</dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Email</dt>
+                    <dd>
+                        @if (!string.IsNullOrWhiteSpace(Model.Profile.Email))
+                        {
+                            <a href="mailto:@Model.Profile.Email" class="email-link">@Model.Profile.Email</a>
+                        }
+                        else
+                        {
+                            <span>Not added yet</span>
+                        }
+                    </dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Birthday</dt>
+                    <dd>@(Model.Profile.BirthDate?.ToString("MMMM d, yyyy", CultureInfo.InvariantCulture) ?? "Not added yet")</dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Registered</dt>
+                    <dd>@Model.Student.RegisteredLabel</dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Last sign-in</dt>
+                    <dd>@Model.Student.LastLoginLabel</dd>
+                </div>
+            </dl>
+        </section>
+
+        <section class="detail-panel admin-card" aria-labelledby="detail-section-2">
+            <div class="panel-header">
+                <h2 id="detail-section-2">About the student</h2>
+            </div>
+            <div class="bio-wrap">
+                <span class="section-label">Introduction</span>
+                <p class="bio-text">@(string.IsNullOrWhiteSpace(Model.Profile.Introduction) ? "No introduction added yet." : Model.Profile.Introduction)</p>
+            </div>
+            <div class="career-quote-wrap">
+                <span class="section-label">Career goal</span>
+                @if (!string.IsNullOrWhiteSpace(Model.Profile.CareerGoal))
+                {
+                    <blockquote class="career-quote">
+                        <p>@Model.Profile.CareerGoal</p>
+                    </blockquote>
+                }
+                else
+                {
+                    <p class="empty-state">No career goal entered yet.</p>
+                }
+            </div>
+        </section>
+
+        <section class="detail-panel admin-card" aria-labelledby="detail-section-3">
+            <div class="panel-header"><h2 id="detail-section-3">Business and contact information</h2></div>
+            <dl class="detail-dl">
+                <div class="detail-row"><dt>Business</dt><dd>@(string.IsNullOrWhiteSpace(Model.Profile.BusinessName) ? "Not added yet" : Model.Profile.BusinessName)</dd></div>
+                <div class="detail-row"><dt>About</dt><dd class="detail-multiline">@(string.IsNullOrWhiteSpace(Model.Profile.BusinessAbout) ? "Not added yet" : Model.Profile.BusinessAbout)</dd></div>
+                <div class="detail-row"><dt>Products &amp; services</dt><dd>@(Model.Profile.Offerings.Count == 0 ? "Not added yet" : string.Join(", ", Model.Profile.Offerings))</dd></div>
+                <div class="detail-row"><dt>Owners</dt><dd>@(Model.Profile.Owners.Count == 0 ? "Not added yet" : string.Join(", ", Model.Profile.Owners))</dd></div>
+                <div class="detail-row"><dt>Contact number</dt><dd>@(string.IsNullOrWhiteSpace(Model.Profile.ContactPhone) ? "Not added yet" : Model.Profile.ContactPhone)</dd></div>
+                <div class="detail-row"><dt>Location</dt><dd>@(string.IsNullOrWhiteSpace(Model.Profile.ContactAddress) ? "Not added yet" : Model.Profile.ContactAddress)</dd></div>
+            </dl>
+        </section>
+        <section class="detail-panel admin-card" aria-labelledby="detail-section-4">
+            <div class="panel-header">
+                <h2 id="detail-section-4">Skills &amp; interests</h2>
+            </div>
+            <div class="tags-group">
+                <span class="section-label">Skills</span>
+                @if (Model.Profile.Skills.Count == 0)
+                {
+                    <p class="empty-state">No skills listed yet.</p>
+                }
+                else
+                {
+                    <ul class="tag-list">
+                        @foreach (var skill in Model.Profile.Skills)
+                        {
+                            <li>@skill</li>
+                        }
+                    </ul>
+                }
+            </div>
+
+            <div class="tags-group">
+                <span class="section-label">Passions &amp; hobbies</span>
+                @if (Model.Profile.Hobbies.Count == 0)
+                {
+                    <p class="empty-state">No hobbies listed yet.</p>
+                }
+                else
+                {
+                    <ul class="tag-list">
+                        @foreach (var hobby in Model.Profile.Hobbies)
+                        {
+                            <li>@hobby</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </section>
+        <section class="detail-panel education-panel admin-card" aria-labelledby="detail-section-5">
+            <div class="panel-header">
+                <h2 id="detail-section-5">Education history</h2>
+            </div>
+            <partial name="_EducationCards" model="Model.Profile.Education" />
+        </section>
+        <section class="detail-panel projects-panel admin-card" aria-labelledby="detail-projects-heading">
+            <div class="panel-header projects-panel-heading">
+                <h2 id="detail-projects-heading">Student projects</h2>
+                <span class="project-count">@Model.Profile.Projects.Count @(Model.Profile.Projects.Count == 1 ? "project" : "projects")</span>
+            </div>
+            @if (Model.Profile.Projects.Count > 0)
+            {
+                <ul class="detail-project-grid">
+                    @foreach (var project in Model.Profile.Projects)
+                    {
+                        <li class="detail-project-card">
+                            <div class="detail-project-media">
+                                @if (!string.IsNullOrWhiteSpace(project.ImageUrl))
+                                {
+                                    <img src="@project.ImageUrl" alt="Screenshot of @project.Title" loading="lazy" decoding="async" />
+                                }
+                                else
+                                {
+                                    <span>No screenshot added</span>
+                                }
+                            </div>
+                            <div class="detail-project-content">
+                                <h3>@project.Title</h3>
+                                @if (!string.IsNullOrWhiteSpace(project.Description))
+                                {
+                                    <p class="detail-multiline">@project.Description</p>
+                                }
+                                @if (Uri.TryCreate(project.ProjectUrl, UriKind.Absolute, out var projectUri)
+                                    && (projectUri.Scheme == Uri.UriSchemeHttps || projectUri.Scheme == Uri.UriSchemeHttp))
+                                {
+                                    <a class="admin-button is-soft" href="@projectUri.AbsoluteUri" target="_blank" rel="noopener noreferrer">View project <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+                                }
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="admin-empty-state projects-empty-state">
+                    <h3>No projects added yet</h3>
+                    <p>This student's saved projects will appear here.</p>
+                </div>
+            }
+        </section>
+    </div>
+
+    <p class="preview-caption">Student profile details are displayed in read-only mode for administrative verification. Account status can be adjusted from the Student Directory.</p>
+</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/education-cards.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/student.css" asp-append-version="true" />
+}

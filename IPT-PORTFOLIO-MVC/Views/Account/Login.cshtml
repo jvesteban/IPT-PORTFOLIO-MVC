@@ -1,0 +1,40 @@
+@model IPT_PORTFOLIO_MVC.ViewModels.Account.LoginViewModel
+@{
+    ViewData["Title"] = "Sign in";
+    ViewData["BodyClass"] = "login-screen";
+}
+
+<div class="auth-form-content login-page">
+    <h1>Welcome back</h1>
+    <p class="form-intro">Sign in to your portfolio workspace.</p>
+    @if (TempData["RegistrationSuccess"] is string message)
+    {
+        <p class="success-notice" role="status">@message</p>
+    }
+    <form asp-controller="Account" asp-action="Login" method="post" class="account-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+        <div class="field">
+            <label asp-for="Username"></label>
+            <input asp-for="Username" autocomplete="username" placeholder="Enter your username" aria-describedby="username-error" />
+            <span asp-validation-for="Username" id="username-error" class="field-error"></span>
+        </div>
+        <div class="field">
+            <label asp-for="Password"></label>
+            <div class="password-field">
+                <input asp-for="Password" autocomplete="current-password" placeholder="Enter your password" aria-describedby="password-error" />
+                <button class="password-toggle" type="button" aria-label="Show password" aria-controls="Password" aria-pressed="false">Show</button>
+            </div>
+            <span asp-validation-for="Password" id="password-error" class="field-error"></span>
+        </div>
+        <button class="submit-button" type="submit">Sign in</button>
+    </form>
+    <p class="switch-prompt">Don't have an account? <a asp-controller="Account" asp-action="Register">Create one</a></p>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account/login.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

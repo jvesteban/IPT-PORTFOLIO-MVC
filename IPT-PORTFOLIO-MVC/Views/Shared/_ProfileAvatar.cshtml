@@ -1,0 +1,11 @@
+@using IPT_PORTFOLIO_MVC.ViewModels.Shared
+@inject IPT_PORTFOLIO_MVC.Services.ProfilePhotoStore Photos
+@model ProfileAvatarViewModel
+@if (Photos.Exists(Model.AccountId))
+{
+    <img class="profile-photo" src="@Url.Action("Show", "ProfilePhotos", new { id = Model.AccountId })" alt="" />
+}
+else
+{
+    <span>@Model.Initials</span>
+}

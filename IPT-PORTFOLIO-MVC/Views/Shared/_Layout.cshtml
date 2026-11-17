@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Your education, skills, and ambitions. Build a student portfolio that tells your story." />
+    <title>@ViewData["Title"] · Student Portfolio</title>
+    <link rel="stylesheet" href="~/css/account/auth.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="@ViewData["BodyClass"]">
+    <a class="skip-link" href="#account-form">Skip to form</a>
+    <div class="auth-shell">
+        <header class="auth-header">
+            <a class="brand" asp-controller="Account" asp-action="Login">IPT PORTFOLIO</a>
+            <span class="brand-caption">PORTFOLIO ITO SA IPT</span>
+        </header>
+        <main class="form-area" id="account-form" tabindex="-1">@RenderBody()</main>
+        <footer class="account-footer">© @DateTime.Now.Year Student Portfolio</footer>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/account/auth.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

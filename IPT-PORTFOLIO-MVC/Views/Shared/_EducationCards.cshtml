@@ -1,0 +1,38 @@
+@using IPT_PORTFOLIO_MVC.Services.Preview
+@model IReadOnlyList<PreviewEducation>
+
+<div class="education-stages">
+    @foreach (var level in PreviewEducation.Levels)
+    {
+        var history = Model.FirstOrDefault(item => item.Level == level);
+        <section class="education-stage">
+            <h3>@level</h3>
+            @foreach (var grade in PreviewEducation.Grades(level))
+            {
+                var entries = history?.Entries.Where(entry => entry.Grade == grade).OrderBy(entry => entry.StartYear).ToArray() ?? [];
+                <div class="education-grade">
+                    <h4>@grade</h4>
+                    @if (entries.Length == 0)
+                    {
+                        <p class="education-unfilled">Not added yet</p>
+                    }
+                    @foreach (var entry in entries)
+                    {
+                        <div class="education-school">
+                            <p>@entry.SchoolName</p>
+                            @if (level == "College" && !string.IsNullOrWhiteSpace(entry.CollegeCourse))
+                            {
+                                <p>@entry.CollegeCourse</p>
+                            }
+                            else if (level == "Senior High" && !string.IsNullOrWhiteSpace(entry.StrandTrack))
+                            {
+                                <p>@entry.StrandTrack</p>
+                            }
+                            <span>@entry.StartYear–@entry.EndYear</span>
+                        </div>
+                    }
+                </div>
+            }
+        </section>
+    }
+</div>

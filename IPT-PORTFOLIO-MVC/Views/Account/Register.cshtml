@@ -1,0 +1,57 @@
+@model IPT_PORTFOLIO_MVC.ViewModels.Account.RegisterViewModel
+@{
+    ViewData["Title"] = "Create account";
+    ViewData["BodyClass"] = "register-screen";
+}
+
+<div class="auth-form-content register-page">
+    <h1>Create your account</h1>
+    <p class="form-intro">Start building your student portfolio.</p>
+    <form asp-controller="Account" asp-action="Register" method="post" class="account-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+        <div class="field-row">
+            <div class="field">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" autocomplete="given-name" placeholder="First name" aria-describedby="firstname-error" />
+                <span asp-validation-for="FirstName" id="firstname-error" class="field-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" autocomplete="family-name" placeholder="Last name" aria-describedby="lastname-error" />
+                <span asp-validation-for="LastName" id="lastname-error" class="field-error"></span>
+            </div>
+        </div>
+        <div class="field">
+            <label asp-for="Username"></label>
+            <input asp-for="Username" autocomplete="username" placeholder="Choose a name or nickname" aria-describedby="username-error" />
+            <span asp-validation-for="Username" id="username-error" class="field-error"></span>
+        </div>
+        <div class="field">
+            <label asp-for="Password"></label>
+            <div class="password-field">
+                <input asp-for="Password" autocomplete="new-password" placeholder="Create a password" aria-describedby="password-hint password-error" />
+                <button class="password-toggle" type="button" aria-label="Show password" aria-controls="Password" aria-pressed="false">Show</button>
+            </div>
+            <span class="field-hint" id="password-hint">Use at least 8 characters.</span>
+            <span asp-validation-for="Password" id="password-error" class="field-error"></span>
+        </div>
+        <div class="field">
+            <label asp-for="ConfirmPassword"></label>
+            <div class="password-field">
+                <input asp-for="ConfirmPassword" autocomplete="new-password" placeholder="Enter your password again" aria-describedby="confirm-error" />
+                <button class="password-toggle" type="button" aria-label="Show confirm password" aria-controls="ConfirmPassword" aria-pressed="false">Show</button>
+            </div>
+            <span asp-validation-for="ConfirmPassword" id="confirm-error" class="field-error"></span>
+        </div>
+        <button class="submit-button" type="submit">Create student account</button>
+    </form>
+    <p class="switch-prompt">Already have an account? <a asp-controller="Account" asp-action="Login">Sign in</a></p>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account/register.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

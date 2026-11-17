@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="error-page">
+    <h1>@(ViewData["ErrorTitle"] ?? "Something went wrong")</h1>
+    <p>@(ViewData["ErrorMessage"] ?? "Please try again later.")</p>
+    <a asp-controller="Account" asp-action="Login">Back to sign in</a>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account/error.css" asp-append-version="true" />
+}

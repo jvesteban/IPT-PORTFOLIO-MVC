@@ -1,0 +1,255 @@
+@using IPT_PORTFOLIO_MVC.Services.Preview
+@using IPT_PORTFOLIO_MVC.ViewModels.Student
+@model StudentProfileEditViewModel
+@{
+    Layout = "_StudentLayout";
+    ViewData["Title"] = "Edit my profile";
+    ViewData["BodyClass"] = "edit-page";
+}
+<div class="edit-profile">
+    <header class="edit-heading student-page-heading">
+        <a class="editor-back-link" asp-controller="Student" asp-action="Portfolio"><span aria-hidden="true">←</span> Back to my portfolio</a>
+        <h1>Edit your <span>profile.</span></h1>
+        <p>Update the information students see on your portfolio.</p>
+    </header>
+    <div class="editor-layout">
+        <aside class="editor-sidebar">
+            <nav class="edit-section-nav student-ui-card" aria-label="Profile sections">
+                <p>ON THIS PAGE</p>
+                <a href="#personal-heading">Personal information</a>
+                <a href="#about-heading">Introduction &amp; goals</a>
+                <a href="#business-heading">Business details</a>
+                <a href="#contact-heading">Contact information</a>
+                <a href="#education-heading">Education</a>
+                <a href="#interests-heading">Skills &amp; interests</a>
+                <a href="#projects-heading">Projects</a>
+            </nav>
+        </aside>
+        <form asp-controller="Student" asp-action="Edit" method="post" enctype="multipart/form-data" class="editor-form">
+            <div tabindex="-1" asp-validation-summary="All" class="validation-summary" role="alert">
+                <h2>Check the highlighted fields</h2>
+                <p>Review these details, then save your changes again.</p>
+            </div>
+            <section class="edit-section student-ui-card" aria-labelledby="personal-heading">
+                <div class="editor-section-heading">
+                    <h2 id="personal-heading">Personal information</h2>
+                    <p>Your name, birthday, and profile picture.</p>
+                </div>
+                <div class="field-grid three-columns">
+                <div class="field student-field">
+                    <label asp-for="FirstName">First name <span class="field-requirement">Required</span></label>
+                    <input asp-for="FirstName" autocomplete="given-name" aria-required="true" data-val-required="Enter your first name." aria-describedby="FirstName-validation" />
+                    <span asp-validation-for="FirstName" id="FirstName-validation"></span>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="MiddleName">Middle name <span class="field-requirement">Optional</span></label>
+                    <input asp-for="MiddleName" autocomplete="additional-name" aria-describedby="MiddleName-validation" />
+                    <span asp-validation-for="MiddleName" id="MiddleName-validation"></span>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="LastName">Last name <span class="field-requirement">Required</span></label>
+                    <input asp-for="LastName" autocomplete="family-name" aria-required="true" data-val-required="Enter your last name." aria-describedby="LastName-validation" />
+                    <span asp-validation-for="LastName" id="LastName-validation"></span>
+                </div>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="BirthDate">Birthday <span class="field-requirement">Optional</span></label>
+                    <input asp-for="BirthDate" aria-describedby="BirthDate-help BirthDate-validation" />
+                    <small id="BirthDate-help">Use a date between 1900 and today.</small>
+                    <span asp-validation-for="BirthDate" id="BirthDate-validation"></span>
+                </div>
+                <div class="photo-editor">
+                    <div class="photo-preview" id="profile-photo-preview" aria-hidden="true">
+                        <partial name="_ProfileAvatar" model='new IPT_PORTFOLIO_MVC.ViewModels.Shared.ProfileAvatarViewModel(Model.StudentId, "ST")' />
+                    </div>
+                    <div class="field student-field">
+                        <label asp-for="ProfilePicture">Profile picture <span class="field-requirement">Optional</span></label>
+                        <input asp-for="ProfilePicture" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-help ProfilePicture-validation photo-feedback" />
+                        <small id="photo-help">JPG, PNG, or WebP · Up to 3 MB. Save changes to upload your selected photo.</small>
+                        <span asp-validation-for="ProfilePicture" id="ProfilePicture-validation"></span>
+                        <p id="photo-feedback" role="status" aria-live="polite"></p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="edit-section student-ui-card" aria-labelledby="about-heading">
+                <div class="editor-section-heading">
+                    <h2 id="about-heading">Introduction and goals</h2>
+                    <p>Tell visitors about yourself and what you want to work toward.</p>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="Introduction">Personal introduction <span class="field-requirement">Optional</span></label>
+                    <textarea asp-for="Introduction" rows="4" aria-describedby="Introduction-help Introduction-validation" placeholder="Tell other students a little about yourself."></textarea>
+                    <small id="Introduction-help">Up to 10,000 characters.</small>
+                    <span asp-validation-for="Introduction" id="Introduction-validation"></span>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="CareerGoal">Career goal <span class="field-requirement">Optional</span></label>
+                    <textarea asp-for="CareerGoal" rows="3" aria-describedby="CareerGoal-help CareerGoal-validation" placeholder="What would you like to do in the future?"></textarea>
+                    <small id="CareerGoal-help">Up to 10,000 characters.</small>
+                    <span asp-validation-for="CareerGoal" id="CareerGoal-validation"></span>
+                </div>
+            </section>
+
+            <section class="edit-section student-ui-card" aria-labelledby="business-heading">
+                <div class="editor-section-heading">
+                    <h2 id="business-heading">Business details</h2>
+                    <p>Add the business information you want to show. These fields are optional.</p>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="BusinessName">Business or company name <span class="field-requirement">Optional</span></label>
+                    <input asp-for="BusinessName" aria-describedby="BusinessName-validation" />
+                    <span asp-validation-for="BusinessName" id="BusinessName-validation"></span>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="BusinessAbout">About the business or company <span class="field-requirement">Optional</span></label>
+                    <textarea asp-for="BusinessAbout" rows="4" aria-describedby="BusinessAbout-help BusinessAbout-validation" placeholder="Introduce your business or company."></textarea>
+                    <small id="BusinessAbout-help">Up to 10,000 characters.</small>
+                    <span asp-validation-for="BusinessAbout" id="BusinessAbout-validation"></span>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="Offerings">Products and services <span class="field-requirement">Optional</span></label>
+                    <textarea asp-for="Offerings" rows="8" aria-describedby="Offerings-help Offerings-validation" placeholder="Describe each product or service on its own line."></textarea>
+                    <small id="Offerings-help">Start each product or service on a new line. Up to 10,000 characters in total.</small>
+                    <span asp-validation-for="Offerings" id="Offerings-validation"></span>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="Owners">Owners <span class="field-requirement">Optional</span></label>
+                    <textarea asp-for="Owners" rows="4" aria-describedby="Owners-help Owners-validation" placeholder="Enter one owner per line."></textarea>
+                    <small id="Owners-help">One name per line. Up to 20 names, with 100 characters per name.</small>
+                    <span asp-validation-for="Owners" id="Owners-validation"></span>
+                </div>
+            </section>
+
+            <section class="edit-section student-ui-card" aria-labelledby="contact-heading">
+                <div class="editor-section-heading">
+                    <h2 id="contact-heading">Contact information</h2>
+                    <p>These details appear in your portfolio's Contact section. You can leave them blank.</p>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="Email">Email <span class="field-requirement">Optional</span></label>
+                    <input asp-for="Email" autocomplete="email" type="email" aria-describedby="Email-validation" data-val-email="Enter a valid email address, or leave this field blank." />
+                    <span asp-validation-for="Email" id="Email-validation"></span>
+                </div>
+                <div class="field-grid">
+                <div class="field student-field">
+                    <label asp-for="ContactPhone">Contact number <span class="field-requirement">Optional</span></label>
+                    <input asp-for="ContactPhone" autocomplete="tel" type="tel" aria-describedby="ContactPhone-validation" />
+                    <span asp-validation-for="ContactPhone" id="ContactPhone-validation"></span>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="ContactAddress">Address or location <span class="field-requirement">Optional</span></label>
+                    <input asp-for="ContactAddress" autocomplete="street-address" aria-describedby="ContactAddress-validation" />
+                    <span asp-validation-for="ContactAddress" id="ContactAddress-validation"></span>
+                </div>
+                </div>
+            </section>
+
+            <section class="edit-section student-ui-card" aria-labelledby="education-heading">
+                <div class="editor-section-heading">
+                    <h2 id="education-heading">Education history</h2>
+                    <p>Fill in the school and year range for each grade. Leave grades you have not attended blank.</p>
+                </div>
+                <p id="education-years-help" class="education-help">Leave unused records blank. For each record you use, enter the school name and both years (1900–2100). The end year can match or follow the start year.</p>
+                <p id="education-feedback" class="education-feedback" role="status" aria-live="polite"></p>
+                @for (var i = 0; i < 4; i++)
+                {
+                    var level = StudentProfileEditViewModel.EducationLevels[i];
+                    var rowData = new ViewDataDictionary(ViewData);
+                    rowData["Grades"] = PreviewEducation.Grades(level);
+                    rowData["Level"] = level;
+                    <fieldset class="education-editor" data-education-level data-prefix="Education[@i].Entries">
+                        <legend>@level</legend>
+                        <input asp-for="Education[i].Level" type="hidden" />
+                        <div class="education-autofill" data-autofill-controls hidden>
+                            <label><input type="checkbox" data-autofill aria-describedby="autofill-help-@i" /> Use the same school for remaining years</label>
+                            <p id="autofill-help-@i">Complete the first card, then autofill the blank fields. Each next grade starts one year later. Autofill is available when the records use the same school, course and strand.</p>
+                            <p data-autofill-status role="status"></p>
+                        </div>
+                        <div class="education-records">
+                            @for (var j = 0; j < Model.Education[i].Entries.Count; j++)
+                            {
+                                rowData.TemplateInfo.HtmlFieldPrefix = $"Education[{i}].Entries[{j}]";
+                                <partial name="_EducationEntryFields" model="Model.Education[i].Entries[j]" view-data="rowData" />
+                            }
+                        </div>
+                    </fieldset>
+                }
+            </section>
+
+            <section class="edit-section student-ui-card" aria-labelledby="interests-heading">
+                <div class="editor-section-heading">
+                    <h2 id="interests-heading">Skills and interests</h2>
+                    <p>List the skills you have and the activities you enjoy.</p>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="Skills">Skills <span class="field-requirement">Optional</span></label>
+                    <textarea asp-for="Skills" rows="3" aria-describedby="Skills-help Skills-validation" placeholder="Enter your skills"></textarea>
+                    <small id="Skills-help">Up to 10,000 characters. Leave a blank line between paragraphs.</small>
+                    <span asp-validation-for="Skills" id="Skills-validation"></span>
+                </div>
+                <div class="field student-field">
+                    <label asp-for="Hobbies">Passion and hobbies <span class="field-requirement">Optional</span></label>
+                    <textarea asp-for="Hobbies" rows="3" aria-describedby="Hobbies-help Hobbies-validation" placeholder="Enter your passions and hobbies"></textarea>
+                    <small id="Hobbies-help">Up to 10,000 characters. Leave a blank line between paragraphs.</small>
+                    <span asp-validation-for="Hobbies" id="Hobbies-validation"></span>
+                </div>
+            </section>
+
+            <section class="edit-section student-ui-card" aria-labelledby="projects-heading">
+                <div class="editor-section-heading">
+                    <h2 id="projects-heading">Student projects</h2>
+                    <p>Add the work you want to show on your portfolio. Give each project a title; leave unused cards blank.</p>
+                </div>
+                <div class="project-editor-help">
+                    <p id="project-image-help">Optional JPG, PNG, or WebP image, up to 3 MB per project. Image changes take effect when you save.</p>
+                    <p id="project-description-help">Descriptions can include your role, what you built, or what you learned. Up to 10,000 characters.</p>
+                    <p id="project-link-help">Links can point to a live project, repository, or document. Use a full http:// or https:// link, up to 500 characters.</p>
+                </div>
+                <p class="project-feedback" id="project-feedback" role="status" aria-live="polite"></p>
+                <p class="project-editor-empty student-feedback" data-project-empty hidden>No project cards. Select Add project to create one.</p>
+                <div class="project-records" data-project-records>
+                    @for (var i = 0; i < Model.Projects.Count; i++)
+                    {
+                        var projectData = new ViewDataDictionary(ViewData);
+                        projectData.TemplateInfo.HtmlFieldPrefix = $"Projects[{i}]";
+                        <partial name="_ProjectEntryFields" model="Model.Projects[i]" view-data="projectData" />
+                    }
+                </div>
+                <button type="button" class="add-project-button student-button is-soft" data-add-project hidden>Add project</button>
+                <template data-project-template>
+                    @{
+                        var projectTemplateData = new ViewDataDictionary(ViewData);
+                        projectTemplateData.TemplateInfo.HtmlFieldPrefix = "Projects[template]";
+                    }
+                    <partial name="_ProjectEntryFields" model="new StudentProjectEditViewModel()" view-data="projectTemplateData" />
+                </template>
+            </section>
+
+            <div class="form-actions student-ui-card">
+                <p>Save to update your portfolio.</p>
+                <div class="form-action-buttons">
+                    <a class="student-button is-secondary" asp-controller="Student" asp-action="Portfolio">Cancel</a>
+                    <button class="student-button is-primary" type="submit" data-save-button>Save changes</button>
+                </div>
+            </div>
+            <span class="student-sr-only" id="save-feedback" role="status" aria-live="polite"></span>
+        </form>
+    </div>
+    <dialog id="leave-editor" aria-labelledby="leave-editor-title" aria-describedby="leave-editor-description">
+        <h2 id="leave-editor-title">Discard unsaved changes?</h2>
+        <p id="leave-editor-description">Your portfolio edits haven’t been saved.</p>
+        <div class="leave-editor-actions">
+            <button type="button" class="student-button is-primary" data-keep-editing autofocus>Keep editing</button>
+            <button type="button" class="student-button is-danger" data-discard-changes>Discard changes</button>
+        </div>
+    </dialog>
+</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/Student/Edit.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/student/edit.js" asp-append-version="true"></script>
+}

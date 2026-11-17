@@ -1,0 +1,141 @@
+@model IPT_PORTFOLIO_MVC.ViewModels.Admin.AdminStudentsViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Students";
+}
+<div class="admin-students">
+    <datalist id="deactivation-reasons">
+        <option value="Deactivation requested by the account holder."></option>
+        <option value="This account is a duplicate of another student account."></option>
+        <option value="Enrollment verification is pending."></option>
+    </datalist>
+    <header class="page-heading">
+        <div>
+            <p class="eyebrow">STUDENT MANAGEMENT</p>
+            <h1>Student accounts</h1>
+            <p>Browse student portfolios and manage account access.</p>
+        </div>
+    </header>
+
+    @if (TempData["AdminNotice"] is string notice)
+    {
+        <div class="admin-feedback" role="status">
+            <div><strong>Account status</strong><p>@notice</p></div>
+        </div>
+    }
+
+    <section class="students-panel admin-card" aria-labelledby="student-list-heading">
+        <div class="list-heading admin-panel-heading">
+            <div>
+                <h2 id="student-list-heading">Student directory</h2>
+                <span class="admin-panel-subtitle">@Model.Students.Count @(Model.Students.Count == 1 ? "student" : "students") shown · @Model.TotalStudents total</span>
+            </div>
+        </div>
+
+        <form asp-action="Students" method="get" class="student-filters" data-admin-submit>
+            <div class="admin-field search-field">
+                <label asp-for="Search">Search students</label>
+                <input asp-for="Search" placeholder="Name or username" type="search" />
+            </div>
+            <div class="admin-field select-field">
+                <label asp-for="Status">Account status</label>
+                <select asp-for="Status">
+                    <option value="All">All accounts</option>
+                    <option value="Active">Active only</option>
+                    <option value="Inactive">Inactive only</option>
+                </select>
+            </div>
+            <div class="filter-buttons">
+                <button type="submit" class="admin-button is-primary" data-loading-text="Applying…">Apply filters</button>
+                <a asp-action="Students" class="admin-button is-secondary">Reset</a>
+            </div>
+        </form>
+
+        @if (Model.Students.Count == 0)
+        {
+            <div class="admin-empty-state directory-empty">
+                <h3>@(Model.TotalStudents == 0 ? "No students yet" : "No matching students")</h3>
+                <p>@(Model.TotalStudents == 0 ? "Student accounts will appear here after registration." : "Try another name or username, or clear your filters to see all students.")</p>
+                @if (Model.TotalStudents > 0)
+                {
+                    <a asp-action="Students" class="admin-button is-secondary">Show all students</a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="table-scroll" data-table-scroll tabindex="0" role="region" aria-label="Student accounts table" aria-describedby="directory-table-hint">
+                <table class="students-table" role="table">
+                    <caption class="sr-only">Student accounts directory</caption>
+                    <thead role="rowgroup">
+                        <tr role="row">
+                            <th role="columnheader" scope="col">Student</th>
+                            <th role="columnheader" scope="col">Status</th>
+                            <th role="columnheader" scope="col">Registered</th>
+                            <th role="columnheader" scope="col">Last sign-in</th>
+                            <th role="columnheader" scope="col" class="th-actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody role="rowgroup">
+                        @foreach (var student in Model.Students)
+                        {
+                            <tr role="row" class="student-row">
+                                <td role="cell" class="td-student" data-label="Student">
+                                    <div class="student-identity">
+                                        <div class="student-initials" aria-hidden="true">
+                                            <partial name="_ProfileAvatar" model='new IPT_PORTFOLIO_MVC.ViewModels.Shared.ProfileAvatarViewModel(student.StudentId, string.IsNullOrEmpty(student.FullName) ? "ST" : student.FullName.Substring(0, 1))' />
+                                        </div>
+                                        <div class="student-names">
+                                            <strong>@student.FullName</strong>
+                                            <span class="username">@@@student.Username</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td role="cell" data-label="Status">
+                                    <span class="account-status @(student.IsActive ? "active" : "inactive")">
+                                        <span class="status-dot" aria-hidden="true"></span>
+                                        @(student.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </td>
+                                <td role="cell" class="td-date" data-label="Registered">@student.RegisteredLabel</td>
+                                <td role="cell" class="td-date" data-label="Last sign-in">@student.LastLoginLabel</td>
+                                <td role="cell" class="td-actions" data-label="Actions">
+                                    <div class="row-actions">
+                                        <a asp-action="Student" asp-route-id="@student.StudentId" class="admin-button is-soft" aria-label="View @student.FullName's portfolio">
+                                            View
+                                        </a>
+                                        @if (student.IsActive)
+                                        {
+                                            <details class="deactivation-control">
+                                                <summary class="admin-button is-danger">Deactivate</summary>
+                                                <form asp-action="SetStatus" method="post" class="deactivation-form" data-admin-submit>
+                                                    <input type="hidden" name="StudentId" value="@student.StudentId" />
+                                                    <input type="hidden" name="IsActive" value="false" />
+                                                    <label for="reason-@student.StudentId">Reason to share with @student.FullName</label>
+                                                    <input id="reason-@student.StudentId" name="Reason" list="deactivation-reasons" required maxlength="500" placeholder="Choose or type a reason" />
+                                                    <button type="submit" class="admin-button is-danger" data-loading-text="Saving…">Confirm deactivation</button>
+                                                </form>
+                                            </details>
+                                        }
+                                        else
+                                        {
+                                            <form asp-action="SetStatus" method="post" data-admin-submit>
+                                                <input type="hidden" name="StudentId" value="@student.StudentId" />
+                                                <input type="hidden" name="IsActive" value="true" />
+                                                <button type="submit" class="admin-button is-restore" data-loading-text="Saving…" onclick="return confirm('Activate this student account?');">Activate</button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <p class="table-hint" id="directory-table-hint" hidden>Scroll the table horizontally to see all account details and actions.</p>
+        }
+    </section>
+
+    <p class="preview-caption">Account deactivation immediately blocks sign-in access. Reactivation restores access instantly without losing existing student portfolio data.</p>
+</div>
+@section Styles { <link rel="stylesheet" href="~/css/admin/students.css" asp-append-version="true" /> }

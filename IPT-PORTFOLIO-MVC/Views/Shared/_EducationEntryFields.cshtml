@@ -1,0 +1,47 @@
+@using IPT_PORTFOLIO_MVC.ViewModels.Student
+@model StudentEducationEntryEditViewModel
+
+
+<div class="education-record" data-school-record role="group" aria-labelledby="@(Html.IdFor(m => m.SchoolName))-heading">
+    <div class="education-record-heading">
+        <div><span>School record</span><h3 id="@(Html.IdFor(m => m.SchoolName))-heading" data-record-title>@Model.Grade</h3></div>
+    </div>
+    <div class="field student-field school-name-field">
+        <label asp-for="SchoolName"></label>
+        <input asp-for="SchoolName" data-field="SchoolName" autocomplete="off" aria-describedby="@(Html.IdFor(m => m.SchoolName))-validation" />
+        <span asp-validation-for="SchoolName" data-error-for="SchoolName" id="@(Html.IdFor(m => m.SchoolName))-validation"></span>
+    </div>
+    @if (ViewData["Level"] as string == "College")
+    {
+        <div class="field student-field">
+            <label asp-for="CollegeCourse"></label>
+            <input asp-for="CollegeCourse" data-field="CollegeCourse" maxlength="200" aria-describedby="@(Html.IdFor(m => m.CollegeCourse))-validation" />
+            <span asp-validation-for="CollegeCourse" data-error-for="CollegeCourse" id="@(Html.IdFor(m => m.CollegeCourse))-validation"></span>
+        </div>
+    }
+    else if (ViewData["Level"] as string == "Senior High")
+    {
+        <div class="field student-field">
+            <label asp-for="StrandTrack"></label>
+            <input asp-for="StrandTrack" data-field="StrandTrack" maxlength="200" aria-describedby="@(Html.IdFor(m => m.StrandTrack))-validation" />
+            <span asp-validation-for="StrandTrack" data-error-for="StrandTrack" id="@(Html.IdFor(m => m.StrandTrack))-validation"></span>
+        </div>
+    }
+    <div class="education-year-fields">
+        <div class="field student-field">
+            <label asp-for="Grade"></label>
+            <input asp-for="Grade" type="hidden" /><input value="@Model.Grade" readonly aria-label="Grade / year" />
+            <span asp-validation-for="Grade" data-error-for="Grade" id="@(Html.IdFor(m => m.Grade))-validation"></span>
+        </div>
+        <div class="field student-field">
+            <label asp-for="StartYear"></label>
+            <input asp-for="StartYear" data-field="StartYear" type="number" min="1900" max="2100" aria-describedby="education-years-help @(Html.IdFor(m => m.StartYear))-validation" data-val-range="Use a year from 1900 to 2100." />
+            <span asp-validation-for="StartYear" data-error-for="StartYear" id="@(Html.IdFor(m => m.StartYear))-validation"></span>
+        </div>
+        <div class="field student-field">
+            <label asp-for="EndYear"></label>
+            <input asp-for="EndYear" data-field="EndYear" type="number" min="1900" max="2100" aria-describedby="education-years-help @(Html.IdFor(m => m.EndYear))-validation" data-val-range="Use a year from 1900 to 2100." />
+            <span asp-validation-for="EndYear" data-error-for="EndYear" id="@(Html.IdFor(m => m.EndYear))-validation"></span>
+        </div>
+    </div>
+</div>

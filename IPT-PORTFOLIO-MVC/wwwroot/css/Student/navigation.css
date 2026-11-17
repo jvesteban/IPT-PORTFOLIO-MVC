@@ -1,0 +1,263 @@
+/* Shared navigation for dashboard, portfolio and profile editing. */
+.student-shell > .workspace-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #e1e7f0;
+    background: rgb(255 255 255 / 94%);
+    backdrop-filter: saturate(1.1) blur(8px);
+    box-shadow: 0 2px 12px #183b6c05;
+}
+
+.student-navbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    width: min(1160px, calc(100% - 64px));
+    min-height: 76px;
+    margin: 0 auto;
+    padding: 12px 0;
+}
+
+.student-navbar-brand {
+    flex: 0 1 auto;
+    max-width: 220px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #204b9c;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -.55px;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.student-navbar-brand:hover {
+    color: #1949b3;
+}
+
+.student-navbar-panel {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-width: 0;
+}
+
+.student-navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 auto;
+}
+
+.student-navbar-links a, .student-navbar-action-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: var(--student-control-radius);
+    color: #526781;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+    transition: color .18s ease, background-color .18s ease;
+}
+
+.student-navbar-links a:hover, .student-navbar-action-link:hover {
+    background: #f3f6fc;
+    color: var(--student-blue);
+}
+
+.student-navbar-links a.is-active {
+    background: #edf3ff;
+    color: var(--student-blue);
+}
+
+.student-navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    padding-left: 20px;
+    border-left: 1px solid #e1e7f0;
+}
+
+.student-navbar-actions form {
+    margin: 0;
+}
+
+.student-navbar-button, .student-navbar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid;
+    border-radius: var(--student-control-radius);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .2s ease, transform .22s cubic-bezier(.22, 1, .36, 1);
+}
+
+.student-navbar-button.is-primary {
+    border-color: var(--student-blue);
+    background: var(--student-blue);
+    color: #fff;
+}
+
+.student-navbar-button.is-primary:hover {
+    border-color: #1949b3;
+    background: #1949b3;
+    color: #fff;
+    box-shadow: 0 3px 10px #225bd814;
+}
+
+.student-navbar-button.is-secondary, .student-navbar-toggle {
+    border-color: #dce4ef;
+    background: #fff;
+    color: #526781;
+}
+
+.student-navbar-button.is-secondary:hover, .student-navbar-toggle:hover {
+    border-color: #bacde9;
+    background: #f5f8fe;
+    color: var(--student-blue);
+}
+
+.student-navbar-toggle {
+    display: none;
+    gap: 12px;
+}
+
+.student-navbar :is(a, button):focus-visible {
+    outline: 3px solid #4d83dd;
+    outline-offset: 3px;
+}
+
+@media (max-width: 1050px) {
+    .student-navbar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        min-height: 68px;
+        padding: 10px 0;
+        gap: 12px;
+    }
+    .student-navbar-brand {
+        max-width: calc(100% - 105px);
+    }
+    .student-nav-ready .student-navbar-toggle {
+        display: inline-flex;
+    }
+    .student-navbar-panel {
+        flex-basis: 100%;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 18px;
+        padding: 16px 0;
+    }
+    .student-nav-ready .student-navbar-panel {
+        position: absolute;
+        top: calc(100% + 1px);
+        left: 0;
+        right: 0;
+        display: none;
+        max-height: calc(100svh - 86px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 16px;
+        border: 1px solid #dfe7f1;
+        border-radius: 0 0 12px 12px;
+        background: #fff;
+        box-shadow: 0 12px 28px #183b6c12;
+    }
+    .student-nav-ready .student-navbar.is-menu-open .student-navbar-panel {
+        display: flex;
+    }
+    .student-navbar-links {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 4px;
+        margin: 0;
+    }
+    .student-navbar-links a {
+        justify-content: flex-start;
+    }
+    .student-navbar-actions {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 16px 0 0;
+        border-top: 1px solid #e1e7f0;
+        border-left: 0;
+    }
+}
+
+@media (max-width: 720px) {
+    .student-navbar {
+        width: calc(100% - 40px);
+    }
+}
+
+@media (max-width: 480px) {
+    .student-navbar {
+        width: calc(100% - 32px);
+    }
+}
+
+@media (max-width: 420px) {
+    .student-navbar-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .student-navbar-actions form {
+        grid-column: 1 / -1;
+    }
+    .student-navbar-actions form button {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .student-navbar.is-menu-open .student-navbar-panel {
+        animation: student-menu-enter .2s cubic-bezier(.22, 1, .36, 1) backwards;
+    }
+    @keyframes student-menu-enter {
+        from {
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+    .student-navbar-button:not(:disabled):hover,
+    .student-navbar-toggle:hover {
+        transform: translateY(-1px);
+    }
+    .student-navbar-button:not(:disabled):active,
+    .student-navbar-toggle:active {
+        transform: translateY(0) scale(.99);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .student-navbar, .student-navbar * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+

@@ -1,0 +1,8 @@
+/* Error page only. */
+.error-page { width: 100%; max-width: 430px; padding: 36px; border: 1px solid #e1e7f0; border-radius: 12px; background: #fff; }
+.error-page h1 { margin: 0 0 12px; font-size: 26px; letter-spacing: -.6px; }
+.error-page p { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
+.error-page a { font-size: 14px; font-weight: 600; text-underline-offset: 4px; }
+@media (max-width: 520px) {
+    .error-page { padding: 28px 23px; }
+}

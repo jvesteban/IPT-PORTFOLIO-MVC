@@ -1,0 +1,35 @@
+# Visual Studio and build output
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+artifacts/
+publish/
+
+# Local credentials and deployment settings
+secrets.json
+*.credential.xml
+.env
+.env.*
+*.pubxml
+*.pubxml.user
+*.pfx
+*.p12
+*.key
+
+# Database files, backups, and user uploads
+*.mdf
+*.ldf
+*.ndf
+*.bak
+*.bacpac
+*.dacpac
+/IPT-PORTFOLIO-MVC/App_Data/*
+!/IPT-PORTFOLIO-MVC/App_Data/.gitignore
+
+# Local logs
+*.log
